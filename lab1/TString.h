@@ -7,79 +7,74 @@ public:
 	~TString();
 
 
-	// Êîíñòðóêòîð ïî óìîë÷àíèþ  
+	// <summary> Конструктор по умолчанию </summary> 
 	TString();
 
 
-	// Êîíñòðóêòîð êîïèðîâàíèÿ 
+	// <summary> конструктор копирования </summary>
 	TString(const TString& rhs);
 
 
-	// Ïîëüçîâàòåëüñêèé êîíñòðóêòîð  
+	// <summary> Пользовательский конструктор </summary> 
 	TString(const char * data);
 
-
-	// Îïåðàòîð ïðèñâàèâàíèÿ    
+	// <summary> Оператор присваивания </summary>    
 	TString& operator =(const TString& rhs);
 
 
-	// Îïåðàòîð +=  
+	// <summary> Оператор +=  </summary>
 	TString& operator +=(const TString& rhs);
 
 
-	//  Îïåðàòîð ==  
+	//  <summary> Оператор == </summary>  
 	bool operator ==(const TString& rhs) const;
 
 
-	/// Îïåðàòîð &lt;   
+	/// <summary> Оператор &lt; </summary>   
 	bool operator <(const TString& rhs) const;
 
 
-	// Ôóíêöèÿ ïîèñêà ïîäñòðîêè
+	// <summary> Функция поиска подстроки </summary>
 	size_t Find(const TString& substr) const;
 
 
-	// Ôóíêöèÿ çàìåíû áóêâ 
+	// <summary> Функция замены букв </summary>
 	void Replace(char oldSymbol, char newSymbol);
 
 
-	// Ôóíêöèÿ âîçâðàùàåò äëèíó ñòðîêè 
+	// <summary> Функция возвращает длину строки </summary> 
 	size_t Size() const;
 
 
-	// Ôóíêöèÿ äëÿ îïðåäåëåíèÿ ïóñòà ëè ñòðîêà 
+	// <summary> Функция для определения пуста ли строка </summary>
 	bool Empty() const;
 
 
-	// Îïåðàòîð [] 
+	// <summary> Оператор [] </summary> 
 	char operator[](size_t index) const;
 
 
-	// Îïåðàòîð [] 
+	// <summary> Оператор [] </summary> 
 	char& operator[](size_t index);
 
-
-	// Ñìîòðè ïðèìåð 
 	void RTrim(char symbol);
-
-
-	// Ñìîòðè ïðèìåð 
+ 
 	void LTrim(char symbol);
 
 	friend std::ostream & operator<<(std::ostream &, const TString &);
 };
 
-// Îïåðàòîð +  
+//  <summary> Оператор + </summary> 
 TString operator+(const TString & a, const TString & b);
 
 
-// Îïåðàòîð !=
+// <summary> Оператор != </summary>
 bool operator!=(const TString & a, const TString & b);
 
 
-// Îïåðàòîð &gt;
+// <summary> Оператор &gt; </summary>
 bool operator>(const TString & a, const TString & b);
 
 
-// Îïåðàòîð âûâîäà 
+// <summary> Оператор вывода </summary>
 std::ostream & operator<<(std::ostream &out, const TString &str);
