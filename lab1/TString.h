@@ -3,83 +3,83 @@ class TString
 {
 	char * Data;
 public:
-	//  Деструктор
+	//  Г„ГҐГ±ГІГ°ГіГЄГІГ®Г°
 	~TString();
 
 
-	// Конструктор по умолчанию  
+	// ГЉГ®Г­Г±ГІГ°ГіГЄГІГ®Г° ГЇГ® ГіГ¬Г®Г«Г·Г Г­ГЁГѕ  
 	TString();
 
 
-	// Конструктор копирования 
+	// ГЉГ®Г­Г±ГІГ°ГіГЄГІГ®Г° ГЄГ®ГЇГЁГ°Г®ГўГ Г­ГЁГї 
 	TString(const TString& rhs);
 
 
-	// Пользовательский конструктор  
+	// ГЏГ®Г«ГјГ§Г®ГўГ ГІГҐГ«ГјГ±ГЄГЁГ© ГЄГ®Г­Г±ГІГ°ГіГЄГІГ®Г°  
 	TString(const char * data);
 
 
-	// Оператор присваивания    
+	// ГЋГЇГҐГ°Г ГІГ®Г° ГЇГ°ГЁГ±ГўГ ГЁГўГ Г­ГЁГї    
 	TString& operator =(const TString& rhs);
 
 
-	// Оператор +=  
+	// ГЋГЇГҐГ°Г ГІГ®Г° +=  
 	TString& operator +=(const TString& rhs);
 
 
-	//  Оператор ==  
+	//  ГЋГЇГҐГ°Г ГІГ®Г° ==  
 	bool operator ==(const TString& rhs) const;
 
 
-	/// Оператор &lt;   
+	/// ГЋГЇГҐГ°Г ГІГ®Г° &lt;   
 	bool operator <(const TString& rhs) const;
 
 
-	// Функция поиска подстроки
+	// Г”ГіГ­ГЄГ¶ГЁГї ГЇГ®ГЁГ±ГЄГ  ГЇГ®Г¤Г±ГІГ°Г®ГЄГЁ
 	size_t Find(const TString& substr) const;
 
 
-	// Функция замены букв 
+	// Г”ГіГ­ГЄГ¶ГЁГї Г§Г Г¬ГҐГ­Г» ГЎГіГЄГў 
 	void Replace(char oldSymbol, char newSymbol);
 
 
-	// Функция возвращает длину строки 
+	// Г”ГіГ­ГЄГ¶ГЁГї ГўГ®Г§ГўГ°Г Г№Г ГҐГІ Г¤Г«ГЁГ­Гі Г±ГІГ°Г®ГЄГЁ 
 	size_t Size() const;
 
 
-	// Функция для определения пуста ли строка 
+	// Г”ГіГ­ГЄГ¶ГЁГї Г¤Г«Гї Г®ГЇГ°ГҐГ¤ГҐГ«ГҐГ­ГЁГї ГЇГіГ±ГІГ  Г«ГЁ Г±ГІГ°Г®ГЄГ  
 	bool Empty() const;
 
 
-	// Оператор [] 
+	// ГЋГЇГҐГ°Г ГІГ®Г° [] 
 	char operator[](size_t index) const;
 
 
-	// Оператор [] 
+	// ГЋГЇГҐГ°Г ГІГ®Г° [] 
 	char& operator[](size_t index);
 
 
-	// Смотри пример 
+	// Г‘Г¬Г®ГІГ°ГЁ ГЇГ°ГЁГ¬ГҐГ° 
 	void RTrim(char symbol);
 
 
-	// Смотри пример 
+	// Г‘Г¬Г®ГІГ°ГЁ ГЇГ°ГЁГ¬ГҐГ° 
 	void LTrim(char symbol);
 
 	friend std::ostream & operator<<(std::ostream &, const TString &);
 };
 
-// Оператор +  
+// ГЋГЇГҐГ°Г ГІГ®Г° +  
 TString operator+(const TString & a, const TString & b);
 
 
-// Оператор !=
+// ГЋГЇГҐГ°Г ГІГ®Г° !=
 bool operator!=(const TString & a, const TString & b);
 
 
-// Оператор &gt;
+// ГЋГЇГҐГ°Г ГІГ®Г° &gt;
 bool operator>(const TString & a, const TString & b);
 
 
-// Оператор вывода 
+// ГЋГЇГҐГ°Г ГІГ®Г° ГўГ»ГўГ®Г¤Г  
 std::ostream & operator<<(std::ostream &out, const TString &str);
