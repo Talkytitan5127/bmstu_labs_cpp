@@ -3,7 +3,7 @@ class TString
 {
 	char * Data;
 public:
-	//  Äåñòðóêòîð
+	// <summary> Деструктор </summary>
 	~TString();
 
 
