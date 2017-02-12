@@ -5,25 +5,25 @@ using namespace std;
 
 TString::~TString()
 {
-	delete [] Data; // Удаление памяти, выделенную для Data
+	delete [] Data; // Г“Г¤Г Г«ГҐГ­ГЁГҐ ГЇГ Г¬ГїГІГЁ, ГўГ»Г¤ГҐГ«ГҐГ­Г­ГіГѕ Г¤Г«Гї Data
 }
 
 
 TString::TString()
 {
-	Data = nullptr; // Инициализация нулевым указателем
+	Data = nullptr; // Г€Г­ГЁГ¶ГЁГ Г«ГЁГ§Г Г¶ГЁГї Г­ГіГ«ГҐГўГ»Г¬ ГіГЄГ Г§Г ГІГҐГ«ГҐГ¬
 }
 
 
 TString::TString(const char * data)
 {
-	// Нахождение длины data
+	// ГЌГ ГµГ®Г¦Г¤ГҐГ­ГЁГҐ Г¤Г«ГЁГ­Г» data
 
 	int len = 0;
 	while (data[len] != '\0')
 		len++;
 
-	// Инициализация Data
+	// Г€Г­ГЁГ¶ГЁГ Г«ГЁГ§Г Г¶ГЁГї Data
 
 	Data = new char[len + 1];
 	for (int i = 0; i < len + 1; i++)
@@ -33,13 +33,13 @@ TString::TString(const char * data)
 
 TString::TString(const TString& rhs)
 {
-	// Нахождение длины data
+	// ГЌГ ГµГ®Г¦Г¤ГҐГ­ГЁГҐ Г¤Г«ГЁГ­Г» data
 
 	int len = 0;
 	while (rhs.Data[len] != '\0')
 		len++;
 
-	// Инициализация Data
+	// Г€Г­ГЁГ¶ГЁГ Г«ГЁГ§Г Г¶ГЁГї Data
 
 	Data = new char[len + 1];
 	for (int i = 0; i < len + 1; i++)
@@ -49,18 +49,18 @@ TString::TString(const TString& rhs)
 
 TString & TString::operator=(const TString & rhs)
 {
-	// Проверка на сходство переданных данных
+	// ГЏГ°Г®ГўГҐГ°ГЄГ  Г­Г  Г±ГµГ®Г¤Г±ГІГўГ® ГЇГҐГ°ГҐГ¤Г Г­Г­Г»Гµ Г¤Г Г­Г­Г»Гµ
 
 	if (Data == rhs.Data)
 		return *this;
 
-	// Нахождение длины rhs.Data
+	// ГЌГ ГµГ®Г¦Г¤ГҐГ­ГЁГҐ Г¤Г«ГЁГ­Г» rhs.Data
 
 	int len = 0;
 	while (rhs.Data[len] != '\0')
 		len++;
 
-	// Инициализация Data
+	// Г€Г­ГЁГ¶ГЁГ Г«ГЁГ§Г Г¶ГЁГї Data
 
 	Data = new char[len + 1];
 	for (int i = 0; i < len + 1; i++)
@@ -71,7 +71,7 @@ TString & TString::operator=(const TString & rhs)
 
 TString & TString::operator+=(const TString & rhs)
 {
-	// Нахождение длин Data и rhs.Data
+	// ГЌГ ГµГ®Г¦Г¤ГҐГ­ГЁГҐ Г¤Г«ГЁГ­ Data ГЁ rhs.Data
 
 	int len1 = 0, len2 = 0;
 	while (Data[len1] != '\0')
@@ -79,14 +79,14 @@ TString & TString::operator+=(const TString & rhs)
 	while (rhs.Data[len2] != '\0')
 		len2++;
 
-	// Копирование Data в str
+	// ГЉГ®ГЇГЁГ°Г®ГўГ Г­ГЁГҐ Data Гў str
 
 	int len = len1 + len2;
 	char *str = (char*)malloc(len1*sizeof(char));
 	for (int i = 0; i < len1 + 1; i++)
 		str[i] = Data[i];
 
-	// Инициализация Data
+	// Г€Г­ГЁГ¶ГЁГ Г«ГЁГ§Г Г¶ГЁГї Data
 
 	Data = new char[len + 1];
 	int k = 0;
@@ -107,7 +107,7 @@ TString & TString::operator+=(const TString & rhs)
 
 bool TString::operator==(const TString & rhs) const
 {
-	// Проверка на пустую строку
+	// ГЏГ°Г®ГўГҐГ°ГЄГ  Г­Г  ГЇГіГ±ГІГіГѕ Г±ГІГ°Г®ГЄГі
 
 	if (Data == nullptr)
 	{
@@ -117,7 +117,7 @@ bool TString::operator==(const TString & rhs) const
 			return false;
 	}
 
-	// Нахождение длин Data и rhs.Data
+	// ГЌГ ГµГ®Г¦Г¤ГҐГ­ГЁГҐ Г¤Г«ГЁГ­ Data ГЁ rhs.Data
 
 	int len1 = 0, len2 = 0;
 	while (Data[len1] != '\0')
@@ -125,13 +125,13 @@ bool TString::operator==(const TString & rhs) const
 	while (rhs.Data[len2] != '\0')
 		len2++;
 
-	// Сравнение длин двух строк
+	// Г‘Г°Г ГўГ­ГҐГ­ГЁГҐ Г¤Г«ГЁГ­ Г¤ГўГіГµ Г±ГІГ°Г®ГЄ
 
 	if (len1 != len2)
 		return false;
 	else
 	{
-		//Сравнение строку по буквам
+		//Г‘Г°Г ГўГ­ГҐГ­ГЁГҐ Г±ГІГ°Г®ГЄГі ГЇГ® ГЎГіГЄГўГ Г¬
 
 		bool fl = true;
 		for (int i = 0; i < len1 + 1; i++)
@@ -149,7 +149,7 @@ bool TString::operator==(const TString & rhs) const
 
 size_t TString::Find(const TString & substr) const
 {
-	// Нахождение длин строк Data и substr.Data
+	// ГЌГ ГµГ®Г¦Г¤ГҐГ­ГЁГҐ Г¤Г«ГЁГ­ Г±ГІГ°Г®ГЄ Data ГЁ substr.Data
 
 	int len1 = 0, len2 = 0;
 	while (Data[len1] != '\0')
@@ -157,12 +157,12 @@ size_t TString::Find(const TString & substr) const
 	while (substr.Data[len2] != '\0')
 		len2++;
 
-	// Проверка, является ли подстрока по длине больше чем сама строка
+	// ГЏГ°Г®ГўГҐГ°ГЄГ , ГїГўГ«ГїГҐГІГ±Гї Г«ГЁ ГЇГ®Г¤Г±ГІГ°Г®ГЄГ  ГЇГ® Г¤Г«ГЁГ­ГҐ ГЎГ®Г«ГјГёГҐ Г·ГҐГ¬ Г±Г Г¬Г  Г±ГІГ°Г®ГЄГ 
 
 	if (len2 > len1)
 		return -1;
 
-	// Нахождение подстроки в строке
+	// ГЌГ ГµГ®Г¦Г¤ГҐГ­ГЁГҐ ГЇГ®Г¤Г±ГІГ°Г®ГЄГЁ Гў Г±ГІГ°Г®ГЄГҐ
 
 	int k = 0;
 	for (int i = 0; i < len1; i++)
@@ -187,8 +187,8 @@ size_t TString::Find(const TString & substr) const
 		}
 	}
 
-	// Возвращается -1, т.к. во время выполнения цикла 
-	// не была найдена подстрока в строке
+	// Г‚Г®Г§ГўГ°Г Г№Г ГҐГІГ±Гї -1, ГІ.ГЄ. ГўГ® ГўГ°ГҐГ¬Гї ГўГ»ГЇГ®Г«Г­ГҐГ­ГЁГї Г¶ГЁГЄГ«Г  
+	// Г­ГҐ ГЎГ»Г«Г  Г­Г Г©Г¤ГҐГ­Г  ГЇГ®Г¤Г±ГІГ°Г®ГЄГ  Гў Г±ГІГ°Г®ГЄГҐ
 
 	return -1;
 }
@@ -196,9 +196,9 @@ size_t TString::Find(const TString & substr) const
 
 bool TString::operator<(const TString & rhs) const
 {
-	// строка меньше тогда, 
-	// когда код i-ой буквы первой строки 
-	// меньше кода i-ой буквы второй строки 
+	// Г±ГІГ°Г®ГЄГ  Г¬ГҐГ­ГјГёГҐ ГІГ®ГЈГ¤Г , 
+	// ГЄГ®ГЈГ¤Г  ГЄГ®Г¤ i-Г®Г© ГЎГіГЄГўГ» ГЇГҐГ°ГўГ®Г© Г±ГІГ°Г®ГЄГЁ 
+	// Г¬ГҐГ­ГјГёГҐ ГЄГ®Г¤Г  i-Г®Г© ГЎГіГЄГўГ» ГўГІГ®Г°Г®Г© Г±ГІГ°Г®ГЄГЁ 
 
 	int i = 0;
 	while (true)
@@ -219,14 +219,14 @@ bool TString::operator<(const TString & rhs) const
 
 void TString::Replace(char oldSymbol, char newSymbol)
 {
-	// Нахождение длины Data
+	// ГЌГ ГµГ®Г¦Г¤ГҐГ­ГЁГҐ Г¤Г«ГЁГ­Г» Data
 
 	int len = 0;
 	while (Data[len] != '\0')
 		len++;
 
-	// Копирование Data в str, изменяя
-	// oldSymbol на newSymbol
+	// ГЉГ®ГЇГЁГ°Г®ГўГ Г­ГЁГҐ Data Гў str, ГЁГ§Г¬ГҐГ­ГїГї
+	// oldSymbol Г­Г  newSymbol
 
 	char *str = new char[len + 1];
 	for (int i = 0; i < len + 1; i++)
@@ -237,7 +237,7 @@ void TString::Replace(char oldSymbol, char newSymbol)
 			str[i] = Data[i];
 	}
 
-	// Инициализация Data
+	// Г€Г­ГЁГ¶ГЁГ Г«ГЁГ§Г Г¶ГЁГї Data
 
 	Data = new char[len + 1];
 	for (int i = 0; i < len + 1; i++)
@@ -285,27 +285,27 @@ void TString::RTrim(char symbol)
 
 void TString::LTrim(char symbol)
 {
-	// Проверка, является ли 
-	// первый символ Data 
-	// тем самым symbol
+	// ГЏГ°Г®ГўГҐГ°ГЄГ , ГїГўГ«ГїГҐГІГ±Гї Г«ГЁ 
+	// ГЇГҐГ°ГўГ»Г© Г±ГЁГ¬ГўГ®Г« Data 
+	// ГІГҐГ¬ Г±Г Г¬Г»Г¬ symbol
 
 	if (Data[0] == symbol)
 	{
-		// Нахождение длины
+		// ГЌГ ГµГ®Г¦Г¤ГҐГ­ГЁГҐ Г¤Г«ГЁГ­Г»
 
 		int len = 0;
 		while (Data[len] != '\0')
 			len++;
 
-		// Нахождение индекса первого символа после symbol
+		// ГЌГ ГµГ®Г¦Г¤ГҐГ­ГЁГҐ ГЁГ­Г¤ГҐГЄГ±Г  ГЇГҐГ°ГўГ®ГЈГ® Г±ГЁГ¬ГўГ®Г«Г  ГЇГ®Г±Г«ГҐ symbol
 
 		int i = 0;
 		while (Data[i] == symbol)
 			i++;
 
-		// Копирование в str строки Data, 
-		// начиная с первого символа, 
-		// стоящего после symbol
+		// ГЉГ®ГЇГЁГ°Г®ГўГ Г­ГЁГҐ Гў str Г±ГІГ°Г®ГЄГЁ Data, 
+		// Г­Г Г·ГЁГ­Г Гї Г± ГЇГҐГ°ГўГ®ГЈГ® Г±ГЁГ¬ГўГ®Г«Г , 
+		// Г±ГІГ®ГїГ№ГҐГЈГ® ГЇГ®Г±Г«ГҐ symbol
 
 		char *str = new char[len + 1];
 		int k = 0;
@@ -315,7 +315,7 @@ void TString::LTrim(char symbol)
 			k++;
 		}
 
-		// Инициализация Data
+		// Г€Г­ГЁГ¶ГЁГ Г«ГЁГ§Г Г¶ГЁГї Data
 		
 		Data = new char[len + 1];
 		i = 0;
