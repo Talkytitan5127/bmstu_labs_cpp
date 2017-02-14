@@ -39,7 +39,7 @@ int main()
 	double result = 0;
 	for (int i = 0; i < n; i++)
 		result += deposit[i].get_sum();
-	printf_s("The general sum is %.3lf\n", result);
+	cout << "The result is " << result << endl;
 	
 	delete [] deposit;
 	
