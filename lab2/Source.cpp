@@ -41,6 +41,8 @@ int main()
 		result += deposit[i].get_sum();
 	printf_s("The general sum is %.3lf\n", result);
 	
+	delete [] deposit;
+	
 	system("pause");
 	return 0;
 }
