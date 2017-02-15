@@ -5,7 +5,7 @@ using namespace std;
 
 TString::~TString()
 {
-	delete Data; // <summary> Удаление памяти, выделенную для Data </summary>
+	delete[] Data; // <summary> Удаление памяти, выделенную для Data </summary>
 }
 
 
@@ -59,6 +59,8 @@ TString & TString::operator=(const TString & rhs)
 		len++;
 
 	// <summary> Инициализация Data </summary>
+	if (Data != nullptr)
+		delete[] Data;
 	Data = new char[len + 1];
 	for (int i = 0; i < len + 1; i++)
 		Data[i] = rhs.Data[i];
@@ -79,11 +81,13 @@ TString & TString::operator+=(const TString & rhs)
 	// <summary> Копирование Data в str </summary>
 
 	int len = len1 + len2;
-	char *str = (char*)malloc(len1*sizeof(char));
+	char *str = new char[len + 1];
 	for (int i = 0; i < len1 + 1; i++)
 		str[i] = Data[i];
 
 	// <summary> Инициализация Data </summary>
+	if (Data != nullptr)
+		delete[] Data;
 	Data = new char[len + 1];
 	int k = 0;
 	for (int i = 0; i < len; i++)
@@ -97,6 +101,7 @@ TString & TString::operator+=(const TString & rhs)
 		}
 	}
 	Data[len] = '\0';
+	delete[] str;
 	return *this;
 }
 
@@ -234,9 +239,11 @@ void TString::Replace(char oldSymbol, char newSymbol)
 	}
 
 	// <summary> Инициализация Data </summary>
+	delete[] Data;
 	Data = new char[len + 1];
 	for (int i = 0; i < len + 1; i++)
 		Data[i] = str[i];
+	delete[] str;
 }
 
 size_t TString::Size() const
@@ -315,6 +322,7 @@ void TString::LTrim(char symbol)
 		for (i; str[i] != '\0'; i++)
 			Data[i] = str[i];
 		Data[i] = '\0';
+		delete[] str;
 	}
 }
 
