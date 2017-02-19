@@ -53,6 +53,8 @@ double TVector::operator[](size_t index)const
 
 double & TVector::operator[](size_t index)
 {
+	if (index >= n || index < 0)
+		throw out_of_range("out_of_range");
 	return mas[index];
 }
 
