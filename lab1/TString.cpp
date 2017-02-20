@@ -5,25 +5,25 @@ using namespace std;
 
 TString::~TString()
 {
-	delete[] Data; // <summary> Удаление памяти, выделенную для Data </summary>
+	delete[] Data; // <summary> Г“Г¤Г Г«ГҐГ­ГЁГҐ ГЇГ Г¬ГїГІГЁ, ГўГ»Г¤ГҐГ«ГҐГ­Г­ГіГѕ Г¤Г«Гї Data </summary>
 }
 
 
 TString::TString()
 {
-	Data = nullptr; // <summary> Инициализация нулевым указателем </summary>
+	Data = nullptr; // <summary> Г€Г­ГЁГ¶ГЁГ Г«ГЁГ§Г Г¶ГЁГї Г­ГіГ«ГҐГўГ»Г¬ ГіГЄГ Г§Г ГІГҐГ«ГҐГ¬ </summary>
 }
 
 
 TString::TString(const char * data)
 {
-	//<summary> Нахождение длины data </summary>
+	//<summary> ГЌГ ГµГ®Г¦Г¤ГҐГ­ГЁГҐ Г¤Г«ГЁГ­Г» data </summary>
 
 	int len = 0;
 	while (data[len] != '\0')
 		len++;
 
-	// <summary> Инициализация Data </summary>
+	// <summary> Г€Г­ГЁГ¶ГЁГ Г«ГЁГ§Г Г¶ГЁГї Data </summary>
 	Data = new char[len + 1];
 	for (int i = 0; i < len + 1; i++)
 		Data[i] = data[i];
@@ -32,13 +32,13 @@ TString::TString(const char * data)
 
 TString::TString(const TString& rhs)
 {
-	// <summary> Нахождение длины data </summary>
+	// <summary> ГЌГ ГµГ®Г¦Г¤ГҐГ­ГЁГҐ Г¤Г«ГЁГ­Г» data </summary>
 
 	int len = 0;
 	while (rhs.Data[len] != '\0')
 		len++;
 
-	// <summary> Инициализация Data </summary>
+	// <summary> Г€Г­ГЁГ¶ГЁГ Г«ГЁГ§Г Г¶ГЁГї Data </summary>
 	Data = new char[len + 1];
 	for (int i = 0; i < len + 1; i++)
 		Data[i] = rhs.Data[i];
@@ -47,18 +47,18 @@ TString::TString(const TString& rhs)
 
 TString & TString::operator=(const TString & rhs)
 {
-	// <summary> Проверка на сходство переданных данных </summary>
+	// <summary> ГЏГ°Г®ГўГҐГ°ГЄГ  Г­Г  Г±ГµГ®Г¤Г±ГІГўГ® ГЇГҐГ°ГҐГ¤Г Г­Г­Г»Гµ Г¤Г Г­Г­Г»Гµ </summary>
 
 	if (Data == rhs.Data)
 		return *this;
 
-	// <summary> Нахождение длины rhs.Data </summary>
+	// <summary> ГЌГ ГµГ®Г¦Г¤ГҐГ­ГЁГҐ Г¤Г«ГЁГ­Г» rhs.Data </summary>
 
 	int len = 0;
 	while (rhs.Data[len] != '\0')
 		len++;
 
-	// <summary> Инициализация Data </summary>
+	// <summary> Г€Г­ГЁГ¶ГЁГ Г«ГЁГ§Г Г¶ГЁГї Data </summary>
 	if (Data != nullptr)
 		delete[] Data;
 	Data = new char[len + 1];
@@ -70,7 +70,7 @@ TString & TString::operator=(const TString & rhs)
 
 TString & TString::operator+=(const TString & rhs)
 {
-	// <summary> Нахождение длин Data и rhs.Data </summary>
+	// <summary> ГЌГ ГµГ®Г¦Г¤ГҐГ­ГЁГҐ Г¤Г«ГЁГ­ Data ГЁ rhs.Data </summary>
 
 	int len1 = 0, len2 = 0;
 	while (Data[len1] != '\0')
@@ -78,14 +78,14 @@ TString & TString::operator+=(const TString & rhs)
 	while (rhs.Data[len2] != '\0')
 		len2++;
 
-	// <summary> Копирование Data в str </summary>
+	// <summary> ГЉГ®ГЇГЁГ°Г®ГўГ Г­ГЁГҐ Data Гў str </summary>
 
 	int len = len1 + len2;
 	char *str = new char[len + 1];
 	for (int i = 0; i < len1 + 1; i++)
 		str[i] = Data[i];
 
-	// <summary> Инициализация Data </summary>
+	// <summary> Г€Г­ГЁГ¶ГЁГ Г«ГЁГ§Г Г¶ГЁГї Data </summary>
 	if (Data != nullptr)
 		delete[] Data;
 	Data = new char[len + 1];
@@ -108,7 +108,7 @@ TString & TString::operator+=(const TString & rhs)
 
 bool TString::operator==(const TString & rhs) const
 {
-	// <summary> Проверка на пустую строку </summary>
+	// <summary> ГЏГ°Г®ГўГҐГ°ГЄГ  Г­Г  ГЇГіГ±ГІГіГѕ Г±ГІГ°Г®ГЄГі </summary>
 
 	if (Data == nullptr)
 	{
@@ -118,7 +118,7 @@ bool TString::operator==(const TString & rhs) const
 			return false;
 	}
 
-	// <summary> Нахождение длин Data и rhs.Data </summary>
+	// <summary> ГЌГ ГµГ®Г¦Г¤ГҐГ­ГЁГҐ Г¤Г«ГЁГ­ Data ГЁ rhs.Data </summary>
 
 	int len1 = 0, len2 = 0;
 	while (Data[len1] != '\0')
@@ -126,13 +126,13 @@ bool TString::operator==(const TString & rhs) const
 	while (rhs.Data[len2] != '\0')
 		len2++;
 
-	// <summary> Сравнение длин двух строк </summary>
+	// <summary> Г‘Г°Г ГўГ­ГҐГ­ГЁГҐ Г¤Г«ГЁГ­ Г¤ГўГіГµ Г±ГІГ°Г®ГЄ </summary>
 
 	if (len1 != len2)
 		return false;
 	else
 	{
-		//<summary> Сравнение строку по буквам </summary>
+		//<summary> Г‘Г°Г ГўГ­ГҐГ­ГЁГҐ Г±ГІГ°Г®ГЄГі ГЇГ® ГЎГіГЄГўГ Г¬ </summary>
 
 		bool fl = true;
 		for (int i = 0; i < len1 + 1; i++)
@@ -150,7 +150,7 @@ bool TString::operator==(const TString & rhs) const
 
 size_t TString::Find(const TString & substr) const
 {
-	// <summary> Нахождение длин строк Data и substr.Data </summary>
+	// <summary> ГЌГ ГµГ®Г¦Г¤ГҐГ­ГЁГҐ Г¤Г«ГЁГ­ Г±ГІГ°Г®ГЄ Data ГЁ substr.Data </summary>
 
 	int len1 = 0, len2 = 0;
 	while (Data[len1] != '\0')
@@ -158,12 +158,12 @@ size_t TString::Find(const TString & substr) const
 	while (substr.Data[len2] != '\0')
 		len2++;
 
-	// <summary> Проверка, является ли подстрока по длине больше чем сама строка </summary>
+	// <summary> ГЏГ°Г®ГўГҐГ°ГЄГ , ГїГўГ«ГїГҐГІГ±Гї Г«ГЁ ГЇГ®Г¤Г±ГІГ°Г®ГЄГ  ГЇГ® Г¤Г«ГЁГ­ГҐ ГЎГ®Г«ГјГёГҐ Г·ГҐГ¬ Г±Г Г¬Г  Г±ГІГ°Г®ГЄГ  </summary>
 
 	if (len2 > len1)
 		return -1;
 
-	// <summary> Нахождение подстроки в строке </summary>
+	// <summary> ГЌГ ГµГ®Г¦Г¤ГҐГ­ГЁГҐ ГЇГ®Г¤Г±ГІГ°Г®ГЄГЁ Гў Г±ГІГ°Г®ГЄГҐ </summary>
 
 	int k = 0;
 	for (int i = 0; i < len1; i++)
@@ -188,8 +188,8 @@ size_t TString::Find(const TString & substr) const
 		}
 	}
 
-	//  <summary> Возвращается -1, т.к. во время выполнения цикла </summary>
-	// <summary> не была найдена подстрока в строке </summary>
+	//  <summary> Г‚Г®Г§ГўГ°Г Г№Г ГҐГІГ±Гї -1, ГІ.ГЄ. ГўГ® ГўГ°ГҐГ¬Гї ГўГ»ГЇГ®Г«Г­ГҐГ­ГЁГї Г¶ГЁГЄГ«Г  </summary>
+	// <summary> Г­ГҐ ГЎГ»Г«Г  Г­Г Г©Г¤ГҐГ­Г  ГЇГ®Г¤Г±ГІГ°Г®ГЄГ  Гў Г±ГІГ°Г®ГЄГҐ </summary>
 
 	return -1;
 }
@@ -197,9 +197,9 @@ size_t TString::Find(const TString & substr) const
 
 bool TString::operator<(const TString & rhs) const
 {
-	// <summary> строка меньше тогда, </summary>
-	// <summary> когда код i-ой буквы первой строки </summary>
-	// <summary> меньше кода i-ой буквы второй строки </summary>
+	// <summary> Г±ГІГ°Г®ГЄГ  Г¬ГҐГ­ГјГёГҐ ГІГ®ГЈГ¤Г , </summary>
+	// <summary> ГЄГ®ГЈГ¤Г  ГЄГ®Г¤ i-Г®Г© ГЎГіГЄГўГ» ГЇГҐГ°ГўГ®Г© Г±ГІГ°Г®ГЄГЁ </summary>
+	// <summary> Г¬ГҐГ­ГјГёГҐ ГЄГ®Г¤Г  i-Г®Г© ГЎГіГЄГўГ» ГўГІГ®Г°Г®Г© Г±ГІГ°Г®ГЄГЁ </summary>
 
 	int i = 0;
 	while (true)
@@ -213,21 +213,21 @@ bool TString::operator<(const TString & rhs) const
 		else if (word1 == '\0' && word2 != '\0')
 			return true;
 		else
-			return false;
+			i++;
 	}
 }
 
 
 void TString::Replace(char oldSymbol, char newSymbol)
 {
-	// <summary> Нахождение длины Data </summary>
+	// <summary> ГЌГ ГµГ®Г¦Г¤ГҐГ­ГЁГҐ Г¤Г«ГЁГ­Г» Data </summary>
 
 	int len = 0;
 	while (Data[len] != '\0')
 		len++;
 
-	// <summary> Копирование Data в str, изменяя </summary>
-	// <summary> oldSymbol на newSymbol </summary>
+	// <summary> ГЉГ®ГЇГЁГ°Г®ГўГ Г­ГЁГҐ Data Гў str, ГЁГ§Г¬ГҐГ­ГїГї </summary>
+	// <summary> oldSymbol Г­Г  newSymbol </summary>
 
 	char *str = new char[len + 1];
 	for (int i = 0; i < len + 1; i++)
@@ -238,7 +238,7 @@ void TString::Replace(char oldSymbol, char newSymbol)
 			str[i] = Data[i];
 	}
 
-	// <summary> Инициализация Data </summary>
+	// <summary> Г€Г­ГЁГ¶ГЁГ Г«ГЁГ§Г Г¶ГЁГї Data </summary>
 	delete[] Data;
 	Data = new char[len + 1];
 	for (int i = 0; i < len + 1; i++)
@@ -286,27 +286,27 @@ void TString::RTrim(char symbol)
 
 void TString::LTrim(char symbol)
 {
-	// <summary> Проверка, является ли </summary>
-	// <summary> первый символ Data </summary>
-	// <summary> тем самым symbol </summary>
+	// <summary> ГЏГ°Г®ГўГҐГ°ГЄГ , ГїГўГ«ГїГҐГІГ±Гї Г«ГЁ </summary>
+	// <summary> ГЇГҐГ°ГўГ»Г© Г±ГЁГ¬ГўГ®Г« Data </summary>
+	// <summary> ГІГҐГ¬ Г±Г Г¬Г»Г¬ symbol </summary>
 
 	if (Data[0] == symbol)
 	{
-		// <summary> Нахождение длины </summary>
+		// <summary> ГЌГ ГµГ®Г¦Г¤ГҐГ­ГЁГҐ Г¤Г«ГЁГ­Г» </summary>
 
 		int len = 0;
 		while (Data[len] != '\0')
 			len++;
 
-		// <summary> Нахождение индекса первого символа после symbol </summary>
+		// <summary> ГЌГ ГµГ®Г¦Г¤ГҐГ­ГЁГҐ ГЁГ­Г¤ГҐГЄГ±Г  ГЇГҐГ°ГўГ®ГЈГ® Г±ГЁГ¬ГўГ®Г«Г  ГЇГ®Г±Г«ГҐ symbol </summary>
 
 		int i = 0;
 		while (Data[i] == symbol)
 			i++;
 
-		// <summary> Копирование в str строки Data, </summary>
-		// <summary> начиная с первого символа, </summary>
-		// <summary> стоящего после symbol </summary>
+		// <summary> ГЉГ®ГЇГЁГ°Г®ГўГ Г­ГЁГҐ Гў str Г±ГІГ°Г®ГЄГЁ Data, </summary>
+		// <summary> Г­Г Г·ГЁГ­Г Гї Г± ГЇГҐГ°ГўГ®ГЈГ® Г±ГЁГ¬ГўГ®Г«Г , </summary>
+		// <summary> Г±ГІГ®ГїГ№ГҐГЈГ® ГЇГ®Г±Г«ГҐ symbol </summary>
 
 		char *str = new char[len + 1];
 		int k = 0;
@@ -316,7 +316,7 @@ void TString::LTrim(char symbol)
 			k++;
 		}
 
-		// Инициализация Data
+		// Г€Г­ГЁГ¶ГЁГ Г«ГЁГ§Г Г¶ГЁГї Data
 		Data = new char[len + 1];
 		i = 0;
 		for (i; str[i] != '\0'; i++)
