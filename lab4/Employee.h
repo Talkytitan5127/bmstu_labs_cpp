@@ -2,7 +2,6 @@
 #define FACTORY_EMPLOYEE_H
 
 #include <iostream>
-#include <string>
 
 class TEmploy
 {
