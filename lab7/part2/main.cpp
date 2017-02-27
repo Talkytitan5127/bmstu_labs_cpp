@@ -83,6 +83,10 @@ int main()
     string word;
     cout << "Enter the word" << '\n';
     getline(cin, word);
+    
+    int n = 0;
+    cout << "Enter the number n" << '\n';
+    cin >> n;
 
     string str;
     int st = 1;
@@ -97,7 +101,7 @@ int main()
         {
             flag = true;
             cout << "In string = " << st << " ";
-            print(lst, word, ind, 2);
+            print(lst, word, ind, n);
         }
         else
         {
