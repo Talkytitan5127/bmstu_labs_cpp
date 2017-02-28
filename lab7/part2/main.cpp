@@ -22,7 +22,7 @@ vector<string> NewVec(const string & str)
         {
             word.push_back(char(tolower(str[i])));
         }
-        else if (word != "")
+        else if (!word.empty())
         {
             res.push_back(word);
             word = "";
@@ -44,7 +44,7 @@ vector<int> Find(const vector<string> & list, const string & word)
     return result;
 }
 
-void print(const vector<string> list, const string & word, const int & ind, const int & n)
+void Print(const vector<string> & list, const string & word, const int ind, const int n)
 {
     int k;
     int i;
@@ -113,7 +113,7 @@ int main()
             for (int j = 0; j < ind.size(); j++)
             {
                 cout << "In string = " << st << " ";
-                print(lst, word, ind[j], n);
+                Print(lst, word, ind[j], n);
             }
         }
         else
