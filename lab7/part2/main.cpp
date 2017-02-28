@@ -4,7 +4,7 @@
 
 using namespace std;
 
-vector<string> NewVec(const string str)
+vector<string> NewVec(const string & str)
 {
     vector<string> res;
     string word;
@@ -23,7 +23,7 @@ vector<string> NewVec(const string str)
     return res;
 }
 
-vector<int> Find(const vector<string> list, string word)
+vector<int> Find(const vector<string> & list, const string & word)
 {
     vector<int> result;
     for (int i = 0; i < list.size(); i++)
@@ -36,7 +36,7 @@ vector<int> Find(const vector<string> list, string word)
     return result;
 }
 
-void Print(const vector<string> list, string word, int ind, int n)
+void Print(const vector<string> & list, const string & word, int ind, int n)
 {
     int k;
     int i;
