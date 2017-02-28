@@ -23,19 +23,20 @@ vector<string> NewVec(const string str)
     return res;
 }
 
-int Find(const vector<string> list, string word)
+vector<int> Find(const vector<string> list, string word)
 {
+    vector<int> result;
     for (int i = 0; i < list.size(); i++)
     {
         if (list[i] == word)
         {
-            return i;
+            result.push_back(i);
         }
     }
-    return -1;
+    return result;
 }
 
-void print(const vector<string> list, string word, int ind, int n)
+void Print(const vector<string> list, string word, int ind, int n)
 {
     int k;
     int i;
@@ -83,9 +84,9 @@ int main()
     string word;
     cout << "Enter the word" << '\n';
     getline(cin, word);
-    
+
     int n = 0;
-    cout << "Enter the number n" << '\n';
+    cout << "enter the number n" << '\n';
     cin >> n;
 
     string str;
@@ -95,13 +96,16 @@ int main()
     {
         vector<string> lst = NewVec(str);
 
-        int ind = Find(lst, word);
+        vector<int> ind = Find(lst, word);
 
-        if (ind != -1)
+        if (!ind.empty())
         {
             flag = true;
-            cout << "In string = " << st << " ";
-            print(lst, word, ind, n);
+            for (int j = 0; j < ind.size(); j++)
+            {
+                cout << "In string = " << st << " ";
+                Print(lst, word, ind[j], n);
+            }
         }
         else
         {
