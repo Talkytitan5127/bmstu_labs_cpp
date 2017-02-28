@@ -2,7 +2,7 @@
 
 using namespace std;
 
-string reverse(string word)
+string reverse(const string & word)
 {
     int l = word.size();
     string result;
