@@ -4,6 +4,14 @@
 
 using namespace std;
 
+void Enter(string & word)
+{
+    for (int i = 0; i < word.size(); i++)
+    {
+        word[i] = char(tolower(word[i]));
+    }
+}
+
 vector<string> NewVec(const string & str)
 {
     vector<string> res;
@@ -36,7 +44,7 @@ vector<int> Find(const vector<string> & list, const string & word)
     return result;
 }
 
-void Print(const vector<string> & list, const string & word, int ind, int n)
+void print(const vector<string> list, const string & word, const int & ind, const int & n)
 {
     int k;
     int i;
@@ -84,6 +92,7 @@ int main()
     string word;
     cout << "Enter the word" << '\n';
     getline(cin, word);
+    Enter(word);
 
     int n = 0;
     cout << "enter the number n" << '\n';
@@ -104,7 +113,7 @@ int main()
             for (int j = 0; j < ind.size(); j++)
             {
                 cout << "In string = " << st << " ";
-                Print(lst, word, ind[j], n);
+                print(lst, word, ind[j], n);
             }
         }
         else
