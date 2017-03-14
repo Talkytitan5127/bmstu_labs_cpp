@@ -20,7 +20,6 @@ bool IsMaxFloat(const string &Number)
 		return true;
 }
 
-
 bool BoolFromString(const string &data)
 {
 	string str;
@@ -35,6 +34,37 @@ bool BoolFromString(const string &data)
 		return false;
 	else
 		throw ErrorData();
+
+}
+
+int STOI(string num)
+{
+	int st = num.size() - 1;
+	int res = 0;
+	for (int i = 0; i < num.size(); i++)
+	{
+		res += (num[i] - '0') * pow(10, st);
+		st--;
+	}
+	return res;
+}
+
+float STOF(string num)
+{
+	float res = 0;
+	int dot = num.find('.');
+	int st = dot - 1;
+	for (int i = 0; i < dot; i++)
+	{
+		res += (num[i] - '0') * pow(10, st);
+		st--;
+	}
+	for (int i = dot + 1; i < num.size(); i++)
+	{
+		res += (num[i] - '0') * powf(10, st);
+		st--;
+	}
+	return res;
 
 }
 
@@ -69,7 +99,7 @@ int IntFromString(const string &data)
 		throw LengthError();
 	}
 
-	int Result = stoi(Number);
+	int Result = STOI(Number);
 	
 	Result *= Minus;
 	
@@ -110,7 +140,8 @@ float FloatFromString(const string &data)
 	if (!IsMaxFloat(res))
 		throw LengthError();
 
-	float result = stof(res);
+	float result = STOF(res);
+
 	result *= Minus;
 	return result;
 }
