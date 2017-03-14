@@ -113,10 +113,6 @@ public:
 	{
 		// implement
 		TNode * tmp = Root;
-
-		if (!tmp)
-			throw TNotFoundException("The tree isn't exist\n");
-
 		while (tmp)
 		{
 			if (tmp->Data == value)
