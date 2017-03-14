@@ -37,7 +37,7 @@ bool BoolFromString(const string &data)
 
 }
 
-int STOI(string num)
+int STOI(const string &num)
 {
 	int st = num.size() - 1;
 	int res = 0;
@@ -49,19 +49,16 @@ int STOI(string num)
 	return res;
 }
 
-float STOF(string num)
+float STOF(const string &num)
 {
 	float res = 0;
 	int dot = num.find('.');
 	int st = dot - 1;
-	for (int i = 0; i < dot; i++)
+	for (int i = 0; i < num.size(); i++)
 	{
+		if (i == dot)
+			continue;
 		res += (num[i] - '0') * pow(10, st);
-		st--;
-	}
-	for (int i = dot + 1; i < num.size(); i++)
-	{
-		res += (num[i] - '0') * powf(10, st);
 		st--;
 	}
 	return res;
