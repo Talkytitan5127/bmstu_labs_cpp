@@ -112,7 +112,6 @@ public:
 	TNode * Find(const value_type & value)
 	{
 		// implement
-		TNode * result = nullptr;
 		TNode * tmp = Root;
 
 		if (!tmp)
@@ -122,9 +121,9 @@ public:
 		{
 			if (tmp->Data == value)
 			{
-				result = tmp;
-				break;
+				return tmp;
 			}
+
 			if (value < tmp->Data)
 			{
 				tmp = tmp->Left;
@@ -134,12 +133,7 @@ public:
 				tmp = tmp->Right;
 			}
 		}
-		if (result == nullptr)
-		{
-			throw TNotFoundException("The element wasn't found\n");
-		}
-		else
-			return result;
+		throw TNotFoundException("The element wasn't found\n");
 	}
 
 	friend std::ostream& operator << (std::ostream & out, const TBinaryTree& tree);
