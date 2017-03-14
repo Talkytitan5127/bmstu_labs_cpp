@@ -115,6 +115,9 @@ public:
 		TNode * result = nullptr;
 		TNode * tmp = Root;
 
+		if (!tmp)
+			throw TNotFoundException("The tree isn't exist\n");
+
 		while (tmp)
 		{
 			if (tmp->Data == value)
@@ -133,7 +136,7 @@ public:
 		}
 		if (result == nullptr)
 		{
-			throw TNotFoundException("The element wasn't found");
+			throw TNotFoundException("The element wasn't found\n");
 		}
 		else
 			return result;
