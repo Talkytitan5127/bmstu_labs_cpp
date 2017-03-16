@@ -107,7 +107,7 @@ public:
 		Count++;
 		if (Count > InternalCapacity)
 		{
-			InternalCapacity = Count;
+			InternalCapacity *= 2;
 		}
 		iterator NewVec = new value_type[InternalCapacity];
 		if (Ptr)
@@ -225,7 +225,7 @@ public:
 			throw std::exception("offset of range\n");
 		Count++;
 		if (Count > InternalCapacity)
-			InternalCapacity = Count;
+			InternalCapacity *= 2;
 		iterator NewVec = new value_type[InternalCapacity];
 		iterator begPtr = Ptr;
 		int i = 0;
@@ -256,7 +256,7 @@ public:
 		for (int i = 0; i < count; i++)
 			Count++;
 		if (Count > InternalCapacity)
-			InternalCapacity = Count;
+			InternalCapacity *= Count;
 		iterator NewVec = new value_type[InternalCapacity];
 		iterator begPtr = Ptr;
 		int i = 0;
