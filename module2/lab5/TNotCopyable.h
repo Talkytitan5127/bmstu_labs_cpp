@@ -21,13 +21,10 @@ class TNotCopyable
 		FILE * Des;
 		FileHandle(FILE * fh)
 			: Des(fh)
-		{
-			std::cout << "Newctor\n";
-		}
+		{}
 
 		~FileHandle()
 		{
-			std::cout << "Newdtor\n";
 			fclose(Des);
 		}
 	};
@@ -43,14 +40,14 @@ public:
 	void OpenToWrite(std::string const & fileName)
 	{
 		if (Descriptor.Des != nullptr)
-			throw FileAlreadyOpened("file is open\n");
+			throw FileAlreadyOpened();
 		Descriptor = fopen(fileName.c_str(), "w");
 	}
 
 	void OpenToRead(std::string const & fileName)
 	{
 		if (Descriptor.Des != nullptr)
-			throw FileAlreadyOpened("file is open\n");
+			throw FileAlreadyOpened();
 		Descriptor = fopen(fileName.c_str(), "r");
 	}
 
@@ -58,8 +55,6 @@ public:
 	{
 		if (Descriptor.Des != nullptr)
 		{
-			std::cout << "dtor\n";
-			fclose(Descriptor.Des);
 			Descriptor = nullptr;
 		}
 	}
@@ -69,3 +64,4 @@ public:
 		return Descriptor.Des;
 	}
 };
+
