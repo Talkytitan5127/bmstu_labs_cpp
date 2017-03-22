@@ -7,7 +7,7 @@ void sort(IT beg, IT end)
     for (IT i = beg; i != end; i++)
     {
         IT mi = i;
-        for (IT j = i + 1; j != end; j++)
+        for (IT j = i; j != end; j++)
         {
             if (*j < *mi)
             {
