@@ -1,0 +1,152 @@
+#ifndef TEMPARRAY_TARRAY_H
+#define TEMPARRAY_TARRAY_H
+
+#include <iostream>
+#include <vector>
+
+template <typename T, std::size_t N>
+class TArray
+{
+public:
+	using value_type = T;
+	using size_type = size_t;
+	using iterator = value_type *;
+	using reference = value_type&;
+	using const_reference = const value_type&;
+
+private:
+	value_type Ptr[N];
+
+public:
+	TArray() = default;
+
+	TArray(const std::initializer_list<T> &list)
+	{
+		int i = 0;
+		for (auto &el : list)
+		{
+			Ptr[i] = el;
+			i++;
+		}
+	}
+
+	~TArray() = default;
+
+	size_t size() const
+	{
+		return N;
+	}
+
+	TArray& operator=(const std::initializer_list<T> &list)
+	{
+		if (Ptr == list)
+			return Ptr;
+		int i = 0;
+		for (auto &v : list)
+		{
+			Ptr[i] = v;
+			i++;
+		}
+	}
+
+	size_t max_size() const
+	{
+		return N;
+	}
+
+	bool Empty() const
+	{
+		return N == 0;
+	}
+
+	iterator begin() const
+	{
+		return Ptr;
+	}
+
+	iterator end() const
+	{
+		return Ptr + Count;
+	}
+
+	reference at(size_type index)
+	{
+		if (index < 0 || index >= N)
+			throw std::exception("out_of_range\n");
+		return Ptr[index];
+	}
+
+	value_type at(size_type index) const
+	{
+		if (index < 0 || index >= N)
+			throw std::exception("out_of_range\n");
+		return Ptr[index];
+	}
+
+	reference operator[](size_type index)
+	{
+		if (index < 0 || index >= N)
+			throw std::exception("out_of_range\n");
+		return Ptr[index];
+	}
+
+	const_reference operator[](size_type index) const
+	{
+		if (index < 0 || index >= N)
+			throw std::exception("out_of_range\n");
+		return Ptr[index];
+	}
+
+	reference front()
+	{
+		if (!Ptr)
+			throw std::exception("vector isn't exist\n");
+		return Ptr[0];
+	}
+
+	const_reference front() const
+	{
+		if (!Ptr)
+			throw std::exception("vector isn't exist\n");
+		return Ptr[0];
+	}
+
+	reference back()
+	{
+		if (!Ptr)
+			throw std::exception("vector isn't exist\n");
+		return Ptr[Count - 1];
+	}
+
+	const_reference back() const
+	{
+		if (!Ptr)
+			throw std::exception("vector isn't exist\n");
+		return Ptr[Count - 1];
+	}
+
+	iterator data()
+	{
+		return Ptr;
+	}
+
+	void fill(size_t num)
+	{
+		if (!Ptr)
+		{
+			throw std::exception("vector isn't exist\n");
+		}
+		for (int i = 0; i < Count; i++)
+		{
+			Ptr[i] = num;
+		}
+	}
+
+	void swap(TArray &other) throw()
+	{
+		std::swap(Ptr, other.Ptr);
+	}
+};
+
+
+#endif //TEMPARRAY_TARRAY_H
