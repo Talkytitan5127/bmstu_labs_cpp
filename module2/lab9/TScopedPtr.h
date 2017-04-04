@@ -13,12 +13,12 @@ public:
 
 	~TScopedPtr()
 	{
-		delete[] Ptr;
+		delete Ptr;
 	}
 
 	void reset(T * p = nullptr)
 	{
-		delete[] Ptr;
+		delete Ptr;
 		Ptr = p;
 	}
 
