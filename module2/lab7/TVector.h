@@ -1,5 +1,8 @@
 #ifndef __TVECTOR_INCLUDED__
 #define __TVECTOR_INCLUDED__
+#pragma warning(disable:4996)
+
+
 
 #include <iostream>
 template<typename T>
@@ -67,7 +70,8 @@ public:
 		if (size > InternalCapacity)
 		{
 			iterator NewVec = new value_type[size];
-			memcpy_s(NewVec, size*sizeof(value_type), Ptr, InternalCapacity*sizeof(value_type));
+			std::copy(Ptr, Ptr + InternalCapacity, NewVec);
+			//memcpy_s(NewVec, size*sizeof(value_type), Ptr, InternalCapacity*sizeof(value_type));
 			delete[] Ptr;
 			Ptr = NewVec;
 			InternalCapacity = size;
@@ -77,7 +81,8 @@ public:
 	TVector(const TVector& rhs)
 	{
 		iterator NewVec = new value_type[rhs.InternalCapacity];
-		memcpy_s(NewVec, rhs.InternalCapacity*sizeof(value_type), rhs.Ptr, rhs.InternalCapacity*sizeof(value_type));
+		std::copy(rhs.Ptr, rhs.Ptr + rhs.InternalCapacity, NewVec);
+		//memcpy_s(NewVec, rhs.InternalCapacity*sizeof(value_type), rhs.Ptr, rhs.InternalCapacity*sizeof(value_type));
 		Ptr = NewVec;
 		Count = rhs.Count;
 		InternalCapacity = rhs.InternalCapacity;
@@ -93,7 +98,8 @@ public:
 			InternalCapacity = rhs.InternalCapacity;
 		}
 		iterator NewVec = new value_type[InternalCapacity];
-		memcpy_s(NewVec, InternalCapacity*sizeof(value_type), rhs.Ptr, rhs.InternalCapacity*sizeof(value_type));
+		std::copy(rhs.Ptr, rhs.Ptr + rhs.InternalCapacity, NewVec);
+		//memcpy_s(NewVec, InternalCapacity*sizeof(value_type), rhs.Ptr, rhs.InternalCapacity*sizeof(value_type));
 		Count = rhs.Count;
 		if (!Ptr)
 		{
@@ -111,7 +117,8 @@ public:
 		}
 		iterator NewVec = new value_type[InternalCapacity];
 		if (Ptr)
-			memcpy(NewVec, Ptr, InternalCapacity*sizeof(value_type));
+			std::copy(Ptr, Ptr + InternalCapacity, NewVec);
+			//memcpy(NewVec, Ptr, InternalCapacity*sizeof(value_type));
 		NewVec[Count - 1] = value;
 		delete[] Ptr;
 		Ptr = NewVec;
@@ -187,7 +194,8 @@ public:
 			throw std::exception("vector empty before pop\n");
 		Count--;
 		iterator NewVec = new value_type[InternalCapacity];
-		memcpy_s(NewVec, InternalCapacity*sizeof(value_type), Ptr, Count*sizeof(value_type));
+		std::copy(Ptr, Ptr + Count, NewVec);
+		//memcpy_s(NewVec, InternalCapacity*sizeof(value_type), Ptr, Count*sizeof(value_type));
 		delete[] Ptr;
 		Ptr = NewVec;
 	}
@@ -206,7 +214,8 @@ public:
 			InternalCapacity = count;
 		}
 		iterator NewVec = new value_type[InternalCapacity];
-		memcpy_s(NewVec, InternalCapacity*sizeof(value_type), Ptr, count*sizeof(value_type));
+		std::copy(Ptr, Ptr + count, NewVec);
+		//memcpy_s(NewVec, InternalCapacity*sizeof(value_type), Ptr, count*sizeof(value_type));
 		if (Count < count)
 		{
 			for (int i = Count; i < count; i++)
