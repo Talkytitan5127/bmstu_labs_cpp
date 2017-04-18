@@ -177,7 +177,7 @@ class TMultimap
 		bool found = false;
 		if(Root == nullptr)
 		{
-			cout<<" This Tree is empty! "<<endl;
+			std::cout << " This Tree is empty! " << '\n';
 			return;
 		}
 		pTree curr;
@@ -201,7 +201,7 @@ class TMultimap
 		}
 		if(!found)
 		{
-			cout<<" Data not found! "<<endl;
+			std::cout << " Data not found! " << '\n';
 			return;
 		}
 		for (int i = 0; i < MasPtr.size(); i++)
@@ -430,6 +430,10 @@ public:
 		{
 			return *Value;
 		}
+		iterator operator->()
+		{
+			return Value;
+		}
 		MapIterator operator++()
 		{
 
@@ -580,7 +584,7 @@ public:
 	}
 
 	//function insert single parametr
-	MapIterator Insert(const value_type& rhs)
+	MapIterator insert(const value_type& rhs)
 	{
 		InsertElem(rhs);
 		Count++;
@@ -607,7 +611,7 @@ public:
 	}
 	
 	//function Insert with pos iterator
-	MapIterator Insert(MapIterator It, const value_type& rhs)
+	MapIterator insert(MapIterator It, const value_type& rhs)
 	{
 		InsertElem(rhs);
 		Count++;
@@ -634,7 +638,7 @@ public:
 	}
 	
 	//function Insert initializer list
-	MapIterator Insert(std::initializer_list<value_type> init)
+	MapIterator insert(std::initializer_list<value_type> init)
 	{
 		Count += init.size();
 		for (auto &v : init)
@@ -666,7 +670,7 @@ public:
 	}
 	
 	//function Insert iterator's
-	MapIterator Insert(MapIterator beg, MapIterator en)
+	MapIterator insert(MapIterator beg, MapIterator en)
 	{
 		for (beg; beg != en; beg++)
 		{
@@ -680,7 +684,7 @@ public:
 	}
 
 	//function erasing by key
-	void Erase(const key_type& rhs)
+	void erase(const key_type& rhs)
 	{
 		for (int i = 0; i < MasPtr.size(); i++)
 		{
@@ -694,7 +698,7 @@ public:
 	}
 
 	//function erasing by iterator
-	void Erase(MapIterator& it)
+	void erase(MapIterator& it)
 	{
 		MapIterator en(MasPtr, -1, -1);
 		if (it == en)
@@ -754,7 +758,7 @@ public:
 	}
 
 	//function find
-	MapIterator Find(const key_type& rhs)
+	MapIterator find(const key_type& rhs)
 	{
 		if (Root == nullptr)
 		{
@@ -775,13 +779,13 @@ public:
 	}
 	
 	//function Empty
-	bool Empty()
+	bool empty()
 	{
 		return (Count == 0);
 	}
 	
 	//function size
-	size_type Size()
+	size_type size()
 	{
 		return Count;
 	}
@@ -793,14 +797,14 @@ public:
 	}
 
 	//function clear
-	void Clear()
+	void clear()
 	{
 		DeleteTree();
 		Count = 0;
 	}
 	
 	//function Count
-	size_t TCount(const key_type& rhs)
+	size_t count(const key_type& rhs)
 	{
 		pTree tmp = FindKey(rhs);
 		if (tmp == nullptr)
@@ -810,7 +814,7 @@ public:
 	}
 
 	//function swap
-	void Swap(TMultimap& map)
+	void swap(TMultimap& map)
 	{
 		std::swap(MasPtr, map.MasPtr);
 		std::swap(Count, map.Count);
@@ -818,7 +822,7 @@ public:
 	}
 
 	//function lower_bound
-	MapIterator Lower_bound(const key_type& rhs)
+	MapIterator lower_bound(const key_type& rhs)
 	{
 		int i = 0;
 		for (i; i < MasPtr.size(); i++)
@@ -831,7 +835,7 @@ public:
 	}
 	
 	//function upper_bound
-	MapIterator Upper_bound(const key_type& rhs)
+	MapIterator upper_bound(const key_type& rhs)
 	{
 		int i = 0;
 		for (i; i < MasPtr.size(); i++)
@@ -845,7 +849,7 @@ public:
 	}
 
 	//function equal_range
-	std::pair<MapIterator, MapIterator> Equal_range(const key_type& rhs)
+	std::pair<MapIterator, MapIterator> equal_range(const key_type& rhs)
 	{
 		MapIterator lp = Lower_bound(rhs);
 		MapIterator up = Upper_bound(rhs);
@@ -854,5 +858,4 @@ public:
 		NewVal->second = up;
 		return *NewVal;
 	}
-
 };
