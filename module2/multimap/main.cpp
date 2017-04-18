@@ -1,140 +1,78 @@
-#include <iostream>
 #include <map>
+#include <iostream>
 #include <string>
+#include <algorithm>
+
+#define CHECK
+
+#ifdef CHECK
 #include "TMultimap.h"
 
-using namespace std;
+template<class K, class T>
+using map = TMultimap<K, T>;
+
+#else
+
+template<class K, class T>
+using map = std::multimap<K, T>;
+
+#endif // CHECK
+
+
+#define assert(X) { \
+	if(!(X)) {\
+		std::cout << "see function:'" << __FUNCTION__ << "' line: " << __LINE__ << std::endl;\
+		std::cout << "condition :'" << #X << " is FALSE" << std::endl;\
+		throw std::logic_error(#X); \
+	}\
+}
 
 int main()
 {
-	
-	TMultimap<string, int> mymap();
-
-	TMultimap<int, string> map2{ {2, "ab"}, {10, "cd"}, {3, "pasha"}, {2, "qwer"}, {5, "lol"} };
-	
-	cout << "---MAP--2---\n";
-	map2.Print();
-
-	cout << "------------\n";
-
-	auto p = map2.end();
-	for (auto it = map2.begin(); it != map2.end(); ++it)
 	{
-		cout << (*it).first << " => " << (*it).second << '\n';
+		map<std::string, std::string> m;
+		assert(m.empty());
+
+		m.insert(std::make_pair("a", "1"));
+		m.insert(std::make_pair("b", "2"));
+		m.insert(std::make_pair("c", "3"));
+		m.insert(std::make_pair("c", "3.1"));
+		
+		assert(m.size() == 4);
+
+		auto m1 = m;
+		assert(m.find("b")->second == "2");
+
+		m1.clear();
+		assert(m1.empty());
+
+		m1.swap(m);
+		assert(m.empty());
+		assert(m1.size() == 4);
+
+		assert(m1.find("d") == m1.end());
+		assert(m1.find("a")->first == "a");
+		assert(m1.find("a")->second == "1");
+
+		for (auto it = m1.begin(); it != m1.end(); ++it)
+		{
+			std::cout << it->first << " " << it->second << std::endl;
+		}
+
+		auto it = m1.begin();
+		it++;
+		m1.erase(it);
+		assert(m1.size() == 3);
+		m1.erase("c");
+
+
+
+		assert(m1.size() == 1);
+		for (auto it = m1.begin(); it != m1.end(); ++it)
+		{
+			std::cout << it->first << " " << it->second << std::endl;
+		}
+		
+		return 0;
 	}
-
-	auto el = map2.Find(100);
-	if (el == map2.end())
-		cout << "Didn't find\n";
-
-	cout << "---------\n";
-
-	TMultimap<int, string> map3;
-
-	map3 = map2;
-	cout << "---MAP--3--\n";
-	map3.Print();
-
-	cout << "----------\n";
-
-	map3.Insert(std::pair<int, string>(4, "four"));
-
-	auto pEl = map3.Find(2);
-	
-	cout << "---MAP--3--\n";
-	map3.Print();
-
-	cout << "------\n";
-
-	cout << "iterator: \n" << (*pEl).first << " => " << (*pEl).second << '\n';
-
-	map3.Erase(pEl);
-	cout << "after erase map3\n";
-	
-	cout << "---MAP--2--\n";
-	map2.Print();
-	
-	cout << "---MAP--3--\n";
-	map3.Print();
-	
-	cout << "------\n";
-
-	cout << "iterator: \n" << (*pEl).first << " => " << (*pEl).second << '\n';
-	
-	cout << "before swap\n";
-	cout << "---MAP--3--\n";
-	map3.Print();
-
-	cout << "---MAP--2--\n";
-	map2.Print();
-
-	map3.Swap(map2);
-	cout << "after swap\n";
-	
-	cout << "---MAP--3--\n";
-	map3.Print();
-
-	cout << "---MAP--2--\n";
-	map2.Print();
-
-	TMultimap<string, int> newmap;
-	newmap.Insert(std::make_pair("pop", 10));
-	newmap.Insert(std::make_pair("aba", 5));
-	newmap.Insert(std::make_pair("fal", 33));
-	newmap.Insert(std::make_pair("aba", 86));
-	newmap.Insert(std::make_pair("geg", 1));
-	newmap.Insert(std::make_pair("aba", 100));
-
-	cout << "---newmap----\n";
-	newmap.Print();
-
-	cout << "aba = " << newmap.TCount("aba") << '\n';
-
-
-	TMultimap<char, int> mymultimap;
-
-	mymultimap.Insert(std::make_pair('a', 10));
-	mymultimap.Insert(std::make_pair('b', 121));
-	mymultimap.Insert(std::make_pair('c', 1001));
-	mymultimap.Insert(std::make_pair('c', 2002));
-	mymultimap.Insert(std::make_pair('d', 11011));
-	mymultimap.Insert(std::make_pair('e', 44));
-
-	auto itlow = mymultimap.Lower_bound('b');  
-	auto itup = mymultimap.Upper_bound('d');   
-
-	for (auto it = itlow; it != itup; ++it)
-		std::cout << (*it).first << " => " << (*it).second << '\n';
-	
-
-	TMultimap<char, int> mymm;
-
-	mymm.Insert(std::pair<char, int>('a', 10));
-	mymm.Insert(std::pair<char, int>('b', 20));
-	mymm.Insert(std::pair<char, int>('b', 30));
-	mymm.Insert(std::pair<char, int>('b', 40));
-	mymm.Insert(std::pair<char, int>('c', 50));
-	mymm.Insert(std::pair<char, int>('c', 60));
-	mymm.Insert(std::pair<char, int>('d', 60));
-
-	std::cout << "mymm contains:\n";
-	for (char ch = 'a'; ch <= 'd'; ch++)
-	{
-		auto ret = mymm.Equal_range(ch);
-		std::cout << ch << " =>";
-		for (auto it = ret.first; it != ret.second; ++it)
-			std::cout << ' ' << (*it).second;
-		std::cout << '\n';
-	}
-	
-	TMultimap<char, int> m4(mymm);
-	
-	cout << "--mymm--\n";
-	mymm.Print();
-
-	cout << "---m4---\n";
-	m4.Print();
-	
-	system("pause");
-	return 0;
 }
