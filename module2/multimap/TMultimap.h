@@ -830,6 +830,11 @@ public:
 			if (MasPtr[i]->KeyName == rhs)
 				break;
 		}
+		if (i == MasPtr.size())
+		{
+			MapIterator p(MasPtr, -1, -1);
+			return p;
+		}
 		MapIterator p(MasPtr, i, 0);
 		return p;
 	}
@@ -842,6 +847,11 @@ public:
 		{
 			if (MasPtr[i]->KeyName == rhs)
 				break;
+		}
+		if (i == MasPtr.size())
+		{
+			MapIterator p(MasPtr, -1, -1);
+			return p;
 		}
 		MapIterator p(MasPtr, i, MasPtr[i]->Data.size() - 1);
 		p++;
@@ -858,4 +868,5 @@ public:
 		NewVal->second = up;
 		return *NewVal;
 	}
+
 };
