@@ -30,31 +30,31 @@ class TMultimap
 	size_type Count;
 
 	pTree FindElem(const value_type& rhs)
+	{
+		pTree tmp = Root;
+		while (true)
 		{
-			pTree tmp = Root;
-			while (true)
+			if (tmp)
 			{
-				if (tmp)
+				if (tmp->pRoot)
 				{
-					if (tmp->pRoot)
-					{
-						if (tmp->KeyName < rhs.first && tmp->pRoot->KeyName > rhs.first)
-							return nullptr;
-					}
-					if (tmp->KeyName == rhs.first)
-						return tmp;
-					else
-					{
-						if (rhs.first < tmp->KeyName)
-							tmp = tmp->pLeft;
-						else
-							tmp = tmp->pRight;
-					}
+					if (tmp->KeyName < rhs.first && tmp->pRoot->KeyName > rhs.first)
+						return nullptr;
 				}
+				if (tmp->KeyName == rhs.first)
+					return tmp;
 				else
-					return nullptr;
+				{
+					if (rhs.first < tmp->KeyName)
+						tmp = tmp->pLeft;
+					else
+						tmp = tmp->pRight;
+				}
 			}
+			else
+				return nullptr;
 		}
+	}
 	pTree FindKey(const key_type& rhs)
 	{
 		pTree tmp = Root;
@@ -79,58 +79,59 @@ class TMultimap
 		}
 	}
 	void Sort()
+	{
+		for (int i = 0; i < MasPtr.size(); i++)
 		{
-			for (int i = 0; i < MasPtr.size(); i++)
+			pTree pMin = MasPtr[i];
+			int ind = i;
+			for (int j = i + 1; j < MasPtr.size(); j++)
 			{
-				pTree pMin = MasPtr[i];
-				int ind = i;
-				for (int j = i + 1; j < MasPtr.size(); j++)
+				if (MasPtr[j]->KeyName < pMin->KeyName)
 				{
-					if (MasPtr[j]->KeyName < pMin->KeyName)
-					{
-						ind = j;
-						pMin = MasPtr[j];
-					}
+					ind = j;
+					pMin = MasPtr[j];
 				}
-				if (ind != i)
-					std::swap(MasPtr[i], MasPtr[ind]);
 			}
+			if (ind != i)
+				std::swap(MasPtr[i], MasPtr[ind]);
 		}
+	}
 	void InsertElem(const value_type& rhs)
+	{
+		pTree tmp = new Tree;
+		pTree parent = nullptr;
+		tmp->KeyName = rhs.first;
+		tmp->Data.push_back(rhs.second);
+		tmp->pLeft = nullptr;
+		tmp->pRight = nullptr;
+		tmp->pRoot = nullptr;
+		if (Root == nullptr)
 		{
-			pTree tmp = new Tree;
-			pTree parent;
-			tmp->KeyName = rhs.first;
-			tmp->Data.push_back(rhs.second);
-			tmp->pLeft = nullptr;
-			tmp->pRight = nullptr;
-			tmp->pRoot = nullptr;
-			if (Root == nullptr)
+			Root = tmp;
+			MasPtr.push_back(tmp);
+		}
+		else
+		{
+			pTree fr = FindElem(rhs);
+			if (fr != nullptr)
 			{
-				Root = tmp;
-				MasPtr.push_back(tmp);
+				fr->Data.push_back(rhs.second);
+				return;
 			}
-			else
+			pTree p = Root;
+			while (p)
 			{
-				pTree fr = FindElem(rhs);
-				if (fr != nullptr)
+				parent = p;
+				if (rhs.first < p->KeyName)
 				{
-					fr->Data.push_back(rhs.second);
-					return;
+					p = p->pLeft;
 				}
-				pTree p = Root;
-				while (p)
+				else
 				{
-					parent = p;
-					if (rhs.first < p->KeyName)
-					{
-						p = p->pLeft;
-					}
-					else
-					{
-						p = p->pRight;
-					}
+					p = p->pRight;
 				}
+			}
+			if (parent != nullptr) {
 				if (rhs.first < parent->KeyName)
 				{
 					parent->pLeft = tmp;
@@ -141,21 +142,22 @@ class TMultimap
 					parent->pRight = tmp;
 					tmp->pRoot = parent;
 				}
-				MasPtr.push_back(tmp);
 			}
+			MasPtr.push_back(tmp);
 		}
+	}
 	void PT(pTree rhs)
+	{
+		if (!rhs)
+			return;
+		PT(rhs->pLeft);
+
+		for (auto it = rhs->Data.begin(); it != rhs->Data.end(); it++)
 		{
-			if (!rhs)
-				return;
-			PT(rhs->pLeft);
-		
-			for (auto it = rhs->Data.begin(); it != rhs->Data.end(); it++)
-			{
-			std:cout << "Key = " << rhs->KeyName << " => " << "Data = " << *it << '\n';
-			}
-			PT(rhs->pRight);
+		std:cout << "Key = " << rhs->KeyName << " => " << "Data = " << *it << '\n';
 		}
+		PT(rhs->pRight);
+	}
 	void CopyTree(pTree* NewRoot, pTree Root)
 	{
 		pTree tmp = Root;
@@ -169,13 +171,13 @@ class TMultimap
 		El->pRoot = tmp->pRoot;
 		*NewRoot = El;
 		MasPtr.push_back(El);
-		CopyTree(&El->pLeft,tmp->pLeft);
+		CopyTree(&El->pLeft, tmp->pLeft);
 		CopyTree(&El->pRight, tmp->pRight);
 	}
 	void Remove(const key_type& rhs)
 	{
 		bool found = false;
-		if(Root == nullptr)
+		if (Root == nullptr)
 		{
 			std::cout << " This Tree is empty! " << '\n';
 			return;
@@ -183,23 +185,23 @@ class TMultimap
 		pTree curr;
 		pTree parent = nullptr;
 		curr = Root;
-		while(curr != nullptr)
+		while (curr != nullptr)
 		{
-			 if(curr->KeyName == rhs)
-			 {
+			if (curr->KeyName == rhs)
+			{
 				found = true;
 				break;
-			 }
-			 else
-			 {
-				 parent = curr;
-				 if(rhs > curr->KeyName) 
-					 curr = curr->pRight;
-				 else 
-					 curr = curr->pLeft;
-			 }
+			}
+			else
+			{
+				parent = curr;
+				if (rhs > curr->KeyName)
+					curr = curr->pRight;
+				else
+					curr = curr->pLeft;
+			}
 		}
-		if(!found)
+		if (!found)
 		{
 			std::cout << " Data not found! " << '\n';
 			return;
@@ -213,11 +215,11 @@ class TMultimap
 				break;
 			}
 		}
-		if((curr->pLeft == nullptr && curr->pRight != nullptr)|| (curr->pLeft != nullptr && curr->pRight == nullptr))
+		if ((curr->pLeft == nullptr && curr->pRight != nullptr) || (curr->pLeft != nullptr && curr->pRight == nullptr))
 		{
-			if(curr->pLeft == nullptr && curr->pRight != nullptr)
+			if (curr->pLeft == nullptr && curr->pRight != nullptr)
 			{
-				if (parent != nullptr) 
+				if (parent != nullptr)
 				{
 					if (parent->pLeft == curr)
 					{
@@ -232,36 +234,36 @@ class TMultimap
 				}
 				else
 				{
-				    Root = curr->pRight;
-				    delete curr;
+					Root = curr->pRight;
+					delete curr;
 				}
 			}
-			else 
+			else
 			{
-				if (parent != nullptr) 
+				if (parent != nullptr)
 				{
-				    if (parent->pLeft == curr)
+					if (parent->pLeft == curr)
 					{
-					    parent->pLeft = curr->pLeft;
-					    delete curr;
+						parent->pLeft = curr->pLeft;
+						delete curr;
 					}
 					else
 					{
-					    parent->pRight = curr->pLeft;
-					    delete curr;
-				    }
-			    }
+						parent->pRight = curr->pLeft;
+						delete curr;
+					}
+				}
 				else
 				{
-				    Root = curr->pLeft;
-				    delete curr;
+					Root = curr->pLeft;
+					delete curr;
 				}
 			}
 			return;
 		}
 		if (curr->pLeft == nullptr && curr->pRight == nullptr)
 		{
-			if (parent != nullptr) 
+			if (parent != nullptr)
 			{
 				if (parent->pLeft == curr)
 					parent->pLeft = nullptr;
@@ -275,7 +277,7 @@ class TMultimap
 		{
 			pTree chkr;
 			chkr = curr->pRight;
-			if((chkr->pLeft == nullptr) && (chkr->pRight == nullptr))
+			if ((chkr->pLeft == nullptr) && (chkr->pRight == nullptr))
 			{
 				curr = chkr;
 				delete chkr;
@@ -283,33 +285,33 @@ class TMultimap
 			}
 			else
 			{
-				if((curr->pRight)->pLeft != nullptr)
+				if ((curr->pRight)->pLeft != nullptr)
 				{
 					pTree lcurr;
 					pTree lcurrp;
 					lcurrp = curr->pRight;
 					lcurr = (curr->pRight)->pLeft;
-					while(lcurr->pLeft != nullptr)
+					while (lcurr->pLeft != nullptr)
 					{
-					   lcurrp = lcurr;
-					   lcurr = lcurr->pLeft;
+						lcurrp = lcurr;
+						lcurr = lcurr->pLeft;
 					}
 					curr->KeyName = lcurr->KeyName;
 					curr->Data = lcurr->Data;
 					delete lcurr;
 					lcurrp->pLeft = nullptr;
-			   }
-			   else
-			   {
-				   pTree tmp;
-				   tmp = curr->pRight;
-				   curr->KeyName = tmp->KeyName;
-				   curr->Data = curr->Data;
-				   curr->pRight = tmp->pRight;
-				   delete tmp;
-			   }
+				}
+				else
+				{
+					pTree tmp;
+					tmp = curr->pRight;
+					curr->KeyName = tmp->KeyName;
+					curr->Data = curr->Data;
+					curr->pRight = tmp->pRight;
+					delete tmp;
+				}
 			}
-			 return;
+			return;
 		}
 	}
 	void DeleteTree()
@@ -320,7 +322,7 @@ class TMultimap
 			Remove(MasPtr[ind]->KeyName);
 		}
 	}
-	
+
 public:
 	class MapIterator
 	{
@@ -408,9 +410,9 @@ public:
 				if (it.Value == nullptr)
 					fl = true;
 			}
-			else 
+			else
 			{
-				if (it.Value != nullptr) 
+				if (it.Value != nullptr)
 				{
 					if (Value->first == it.Value->first && Value->second == it.Value->second)
 						fl = true;
@@ -609,7 +611,7 @@ public:
 		MapIterator NewVal(MasPtr, ik, id);
 		return NewVal;
 	}
-	
+
 	//function Insert with pos iterator
 	MapIterator insert(MapIterator It, const value_type& rhs)
 	{
@@ -636,7 +638,7 @@ public:
 		MapIterator NewVal(MasPtr, ik, id);
 		return NewVal;
 	}
-	
+
 	//function Insert initializer list
 	MapIterator insert(std::initializer_list<value_type> init)
 	{
@@ -668,7 +670,7 @@ public:
 		MapIterator NewVal(MasPtr, ik, id);
 		return NewVal;
 	}
-	
+
 	//function Insert iterator's
 	MapIterator insert(MapIterator beg, MapIterator en)
 	{
@@ -777,19 +779,19 @@ public:
 			return NewVal;
 		}
 	}
-	
+
 	//function Empty
 	bool empty()
 	{
 		return (Count == 0);
 	}
-	
+
 	//function size
 	size_type size()
 	{
 		return Count;
 	}
-	
+
 	//function print
 	void Print()
 	{
@@ -802,7 +804,7 @@ public:
 		DeleteTree();
 		Count = 0;
 	}
-	
+
 	//function Count
 	size_t count(const key_type& rhs)
 	{
@@ -838,7 +840,7 @@ public:
 		MapIterator p(MasPtr, i, 0);
 		return p;
 	}
-	
+
 	//function upper_bound
 	MapIterator upper_bound(const key_type& rhs)
 	{
@@ -868,5 +870,4 @@ public:
 		NewVal->second = up;
 		return *NewVal;
 	}
-
 };
