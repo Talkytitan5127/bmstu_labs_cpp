@@ -1,6 +1,5 @@
 #include <iostream>
 #include <vector>
-#include <vld.h>
 
 template<class Key, class T>
 class TMultimap
