@@ -1,6 +1,5 @@
 #include <iostream>
 #include <vector>
-#include <vld.h>
 
 template<class Key, class T>
 class TMultimap
@@ -807,6 +806,10 @@ public:
 	//function lower_bound
 	MapIterator lower_bound(const key_type& rhs)
 	{
+		for (int k = 0; i < MasPtr.size(); i++)
+		{
+			MasPtr[i]->IndDat = 0;
+		}
 		int i = 0;
 		for (i; i < MasPtr.size(); i++)
 		{
@@ -844,9 +847,7 @@ public:
 	{
 		MapIterator lp = Lower_bound(rhs);
 		MapIterator up = Upper_bound(rhs);
-		std::pair<MapIterator, MapIterator>* NewVal = new std::pair<MapIterator, MapIterator>;
-		NewVal->first = lp;
-		NewVal->second = up;
-		return *NewVal;
+		std::pair<MapIterator, MapIterator> NewVal = std::make_pair(lp, up);
+		return NewVal;
 	}
 };
