@@ -1,5 +1,6 @@
 #include <iostream>
 #include <vector>
+#include <vld.h>
 
 template<class Key, class T>
 class TMultimap
@@ -20,6 +21,7 @@ class TMultimap
 		Tree* pLeft;
 		Tree* pRight;
 		Tree* pRoot;
+		int IndDat = 0;
 	};
 
 	typedef Tree* pTree;
@@ -326,77 +328,22 @@ class TMultimap
 public:
 	class MapIterator
 	{
-		iterator Value = nullptr;
+		pTree Value = nullptr;
 		vec_type Mas;
-		int IndKey = -1;
-		int IndDat = -1;
 	public:
 		MapIterator() {}
 		~MapIterator() = default;
-		value_type* MakeElem(int Ik, int Id)
+		MapIterator(vec_type M, pTree rhs)
+			:Mas(M),
+			Value(rhs) {}
+		MapIterator(vec_type M, const MapIterator& it)
+			:Mas(M),
+			Value(it.Value) {}
+		MapIterator(vec_type M, pTree rhs, int Ind)
+			:Mas(M),
+			Value(rhs)
 		{
-			key_type key = Mas[Ik]->KeyName;
-			mapped_type d = Mas[Ik]->Data[Id];
-			value_type* NewVal = new value_type;
-			NewVal->first = key;
-			NewVal->second = d;
-			return NewVal;
-		}
-		MapIterator(const MapIterator& it, const vec_type& m)
-			:Mas(m)
-		{
-			int Ik = 0;
-			int Id = 0;
-			bool fl = false;
-			for (Ik; Ik < Mas.size(); Ik++)
-			{
-				if (it.Value->first == Mas[Ik]->KeyName)
-				{
-					for (Id; Id < Mas[Ik]->Data.size(); Id++)
-					{
-						if (it.Value->second == Mas[Ik]->Data[Id])
-						{
-							fl = true;
-							break;
-						}
-					}
-				}
-				if (fl)
-					break;
-			}
-			Value = MakeElem(Ik, Id);
-			IndKey = Ik;
-			IndDat = Id;
-		}
-		MapIterator(const vec_type& m, int Ik, int Id)
-			:Mas(m)
-		{
-			if (Ik == -1 && Id == -1)
-			{
-				Value = nullptr;
-			}
-			else
-			{
-				if (Value != nullptr)
-					delete Value;
-				Value = MakeElem(Ik, Id);
-				IndKey = Ik;
-				IndDat = Id;
-			}
-		}
-		MapIterator(const vec_type& m, pTree rhs)
-			:Mas(m)
-		{
-			for (int i = 0; i < Mas.size(); i++)
-			{
-				if (Mas[i]->KeyName == rhs->KeyName)
-				{
-					IndKey = i;
-					break;
-				}
-			}
-			IndDat = Mas[IndKey]->Data.size() - 1;
-			Value = MakeElem(IndKey, IndDat);
+			rhs->IndDat = Ind;
 		}
 		bool operator!=(const MapIterator& it)
 		{
@@ -404,122 +351,162 @@ public:
 		}
 		bool operator==(const MapIterator& it)
 		{
-			bool fl = false;
 			if (Value == nullptr)
 			{
 				if (it.Value == nullptr)
-					fl = true;
+				{
+					return true;
+				}
+				else
+				{
+					return false;
+				}
 			}
 			else
 			{
-				if (it.Value != nullptr)
+				if (it.Value == nullptr)
 				{
-					if (Value->first == it.Value->first && Value->second == it.Value->second)
-						fl = true;
+					return false;
+				}
+				else
+				{
+					if (it.Value == Value)
+						return true;
+					else
+						return false;
 				}
 			}
-			return fl;
 		}
 		MapIterator operator=(const MapIterator& it)
 		{
-			Value = it.Value;
 			Mas = it.Mas;
-			IndKey = it.IndKey;
-			IndDat = it.IndDat;
+			Value = it.Value;
 			return *this;
 		}
 		value_type operator*()
 		{
-			return *Value;
+			value_type rhs = std::make_pair(Value->KeyName, Value->Data[Value->IndDat]);
+			return rhs;
 		}
 		iterator operator->()
 		{
-			return Value;
+			iterator rhs = new value_type;
+			rhs->first = Value->KeyName;
+			rhs->second = Value->Data[Value->IndDat];
+			return rhs;
 		}
 		MapIterator operator++()
 		{
-
-			IndDat++;
-			if (IndDat >= Mas[IndKey]->Data.size())
+			int IndKey = 0;
+			for (IndKey; IndKey < Mas.size(); IndKey++)
+			{
+				if (Value == Mas[IndKey])
+					break;
+			}
+			Value->IndDat++;
+			if (Value->Data.size() <= Value->IndDat)
 			{
 				IndKey++;
-				IndDat = 0;
-			}
-			if (IndKey >= Mas.size())
-			{
-				Value = nullptr;
-				IndKey = -1;
-				IndDat = -1;
-			}
-			else
-			{
-				Value = MakeElem(IndKey, IndDat);
+				Value->IndDat--;
+
+				if (Mas.size() <= IndKey)
+				{
+					Value = nullptr;
+				}
+				else
+				{
+					Value = Mas[IndKey];
+				}
 			}
 			return *this;
 		}
 		MapIterator operator++(int)
 		{
-
-			IndDat++;
-			if (IndDat >= Mas[IndKey]->Data.size())
+			int IndKey = 0;
+			for (IndKey; IndKey < Mas.size(); IndKey++)
+			{
+				if (Value == Mas[IndKey])
+					break;
+			}
+			Value->IndDat++;
+			if (Value->Data.size() <= Value->IndDat)
 			{
 				IndKey++;
-				IndDat = 0;
-			}
-			if (IndKey >= Mas.size())
-			{
-				Value = nullptr;
-				IndKey = -1;
-				IndDat = -1;
-			}
-			else
-			{
-				Value = MakeElem(IndKey, IndDat);
+				Value->IndDat--;
+
+				if (Mas.size() <= IndKey)
+				{
+					Value = nullptr;
+				}
+				else
+				{
+					Value = Mas[IndKey];
+				}
 			}
 			return *this;
 		}
 		MapIterator operator--()
 		{
-			IndDat--;
-			if (IndDat < 0)
+			if (Value != nullptr)
 			{
-				IndKey--;
-				if (IndKey < 0)
+				Value->IndDat--;
+				int IndKey = 0;
+				for (IndKey; IndKey < Mas.size(); IndKey++)
 				{
-					Value = nullptr;
-					IndKey = -1;
-					IndDat = -1;
+					if (Value == Mas[IndKey])
+						break;
 				}
-				else
+				if (Value->IndDat < 0)
 				{
-					IndDat = Mas[IndKey]->Data.size() - 1;
+					Value->IndDat = 0;
+					IndKey--;
+					if (IndKey < 0)
+					{
+						Value = nullptr;
+					}
+					else
+					{
+						Value = Mas[IndKey];
+					}
 				}
 			}
-			Value = MakeElem(IndKey, IndDat);
+			else
+			{
+				Value = Mas[Mas.size() - 1];
+			}
 			return *this;
 		}
 		MapIterator operator--(int)
 		{
-			IndDat--;
-			if (IndDat < 0)
+			if (Value != nullptr)
 			{
-				IndKey--;
-				if (IndKey < 0)
+				Value->IndDat--;
+				int IndKey = 0;
+				for (IndKey; IndKey < Mas.size(); IndKey++)
 				{
-					Value = nullptr;
-					IndKey = -1;
-					IndDat = -1;
+					if (Value == Mas[IndKey])
+						break;
 				}
-				else
+				if (Value->IndDat < 0)
 				{
-					IndDat = Mas[IndKey]->Data.size() - 1;
+					Value->IndDat = 0;
+					IndKey--;
+					if (IndKey < 0)
+					{
+						Value = nullptr;
+					}
+					else
+					{
+						Value = Mas[IndKey];
+					}
 				}
 			}
-			Value = MakeElem(IndKey, IndDat);
+			else
+			{
+				Value = Mas[Mas.size() - 1];
+			}
 			return *this;
 		}
-
-
 	};
 
 	// empty constructor
@@ -591,24 +578,20 @@ public:
 		InsertElem(rhs);
 		Count++;
 		Sort();
-		int ik = 0;
-		int id = 0;
-		bool fl = false;
-		for (ik; ik < MasPtr.size(); ik++)
+		int i = 0;
+		for (i; i < MasPtr.size(); i++)
 		{
-			if (MasPtr[ik]->KeyName == rhs.first)
-				for (id; id < MasPtr[ik]->Data.size(); id++)
-				{
-					if (rhs.second == MasPtr[ik]->Data[id])
-					{
-						fl = true;
-						break;
-					}
-				}
-			if (fl)
+			if (MasPtr[i]->KeyName == rhs.first)
 				break;
 		}
-		MapIterator NewVal(MasPtr, ik, id);
+		int j = 0;
+		for (j; j < MasPtr[i]->Data.size(); j++)
+		{
+			if (MasPtr[i]->Data[j] == rhs.second)
+				break;
+		}
+		MasPtr[i]->IndDat = j;
+		MapIterator NewVal(MasPtr, MasPtr[i]);
 		return NewVal;
 	}
 
@@ -618,24 +601,20 @@ public:
 		InsertElem(rhs);
 		Count++;
 		Sort();
-		int ik = 0;
-		int id = 0;
-		bool fl = false;
-		for (ik; ik < MasPtr.size(); ik++)
+		int i = 0;
+		for (i; i < MasPtr.size(); i++)
 		{
-			if (MasPtr[ik]->KeyName == rhs.first)
-				for (id; id < MasPtr[ik]->Data.size(); id++)
-				{
-					if (rhs.second == MasPtr[ik]->Data[id])
-					{
-						fl = true;
-						break;
-					}
-				}
-			if (fl)
+			if (MasPtr[i]->KeyName == rhs.first)
 				break;
 		}
-		MapIterator NewVal(MasPtr, ik, id);
+		int j = 0;
+		for (j; j < MasPtr[i]->Data.size(); j++)
+		{
+			if (MasPtr[i]->Data[j] == rhs.second)
+				break;
+		}
+		MasPtr[i]->IndDat = j;
+		MapIterator NewVal(MasPtr[i]);
 		return NewVal;
 	}
 
@@ -652,22 +631,20 @@ public:
 		int id = 0;
 		auto it = init.end();
 		it--;
-		bool fl = false;
-		for (ik; ik < MasPtr.size(); ik++)
+		int i = 0;
+		for (i; i < MasPtr.size(); i++)
 		{
-			if (MasPtr[ik]->KeyName == it->first)
-				for (id; id < MasPtr[ik]->Data.size(); id++)
-				{
-					if (it->second == MasPtr[ik]->Data[id])
-					{
-						fl = true;
-						break;
-					}
-				}
-			if (fl)
+			if (MasPtr[i]->KeyName == it->first)
 				break;
 		}
-		MapIterator NewVal(MasPtr, ik, id);
+		int j = 0;
+		for (j; j < MasPtr[i]->Data.size(); j++)
+		{
+			if (MasPtr[i]->Data[j] == it->second)
+				break;
+		}
+		MasPtr[i]->IndDat = j;
+		MapIterator NewVal(MasPtr, MasPtr[i]);
 		return NewVal;
 	}
 
@@ -681,7 +658,7 @@ public:
 		}
 		Sort();
 		beg--;
-		MapIterator NewVal(beg, MasPtr);
+		MapIterator NewVal(MasPtr, beg);
 		return NewVal;
 	}
 
@@ -702,8 +679,7 @@ public:
 	//function erasing by iterator
 	void erase(MapIterator& it)
 	{
-		MapIterator en(MasPtr, -1, -1);
-		if (it == en)
+		if (it == end())
 			return;
 		Count--;
 		int i = 0;
@@ -735,12 +711,13 @@ public:
 		}
 		if (!onelen)
 		{
-			MapIterator p(MasPtr, i, j - 1);
+			MasPtr[i]->IndDat = j - 1;
+			MapIterator p(MasPtr, MasPtr[i]);
 			it = p;
 		}
 		else
 		{
-			MapIterator r(MasPtr, i - 1, MasPtr[i - 1]->Data.size() - 1);
+			MapIterator r(MasPtr, MasPtr[i-1]);
 			it = r;
 		}
 	}
@@ -748,14 +725,18 @@ public:
 	// iterator begin
 	MapIterator begin()
 	{
-		MapIterator NewVal(MasPtr, 0, 0);
+		for (int i = 0; i < MasPtr.size(); i++)
+		{
+			MasPtr[i]->IndDat = 0;
+		}
+		MapIterator NewVal(MasPtr, MasPtr[0]);
 		return NewVal;
 	}
 
 	//iterator end
 	MapIterator end()
 	{
-		MapIterator NewVal(MasPtr, -1, -1);
+		MapIterator NewVal(MasPtr, nullptr);
 		return NewVal;
 	}
 
@@ -764,13 +745,13 @@ public:
 	{
 		if (Root == nullptr)
 		{
-			MapIterator NewVal(MasPtr, -1, -1);
+			MapIterator NewVal(MasPtr, nullptr);
 			return NewVal;
 		}
 		pTree el = FindKey(rhs);
 		if (el == nullptr)
 		{
-			MapIterator NewVal(MasPtr, -1, -1);
+			MapIterator NewVal(MasPtr, nullptr);
 			return NewVal;
 		}
 		else
@@ -834,10 +815,9 @@ public:
 		}
 		if (i == MasPtr.size())
 		{
-			MapIterator p(MasPtr, -1, -1);
-			return p;
+			MapIterator NewVal(MasPtr, nullptr);
 		}
-		MapIterator p(MasPtr, i, 0);
+		MapIterator p(MasPtr, MasPtr[i], 0);
 		return p;
 	}
 
@@ -852,10 +832,9 @@ public:
 		}
 		if (i == MasPtr.size())
 		{
-			MapIterator p(MasPtr, -1, -1);
-			return p;
+			MapIterator NewVal(MasPtr, nullptr);
 		}
-		MapIterator p(MasPtr, i, MasPtr[i]->Data.size() - 1);
+		MapIterator p(MasPtr, MasPtr[i], MasPtr[i]->Data.size() - 1);
 		p++;
 		return p;
 	}
