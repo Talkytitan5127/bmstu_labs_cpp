@@ -1,5 +1,6 @@
 #include <iostream>
 #include <vector>
+#include <vld.h>
 
 template<class Key, class T>
 class TMultimap
@@ -330,31 +331,49 @@ public:
 		vec_type Mas;
 	public:
 		MapIterator() {}
+		//MapIterator(MapIterator&& it) = delete;
 		~MapIterator()
 		{
-			if (Value != nullptr) 
+			std::cout << "destructor\n";
+			if (ptr != nullptr)
 			{
-				if (ptr != nullptr)
-				{
+				if (Value != nullptr)
 					delete ptr;
-					ptr = nullptr;
-				}
+				ptr = nullptr;
 			}
 		}
 		MapIterator(vec_type M, pTree rhs)
 			:Mas(M),
-			ptr(nullptr),
-			Value(rhs) {}
+			Value(rhs) 
+		{
+			std::cout << "constructor\n";
+			if (ptr != nullptr)
+			{
+				delete ptr;
+			}
+			ptr = nullptr;
+		}
 		MapIterator(vec_type M, const MapIterator& it)
 			:Mas(M),
-			ptr(nullptr),
-			Value(it.Value) {}
+			Value(it.Value) {
+			std::cout << "constructor\n";
+			if (ptr != nullptr)
+			{
+				delete ptr;
+			}
+			ptr = nullptr;
+		}
 		MapIterator(vec_type M, pTree rhs, int Ind)
 			:Mas(M),
-			ptr(nullptr),
 			Value(rhs)
 		{
 			rhs->IndDat = Ind;
+			std::cout << "constructor\n";
+			if (ptr != nullptr)
+			{
+				delete ptr;
+			}
+			ptr = nullptr;
 		}
 		bool operator!=(const MapIterator& it)
 		{
@@ -390,6 +409,7 @@ public:
 		}
 		MapIterator operator=(const MapIterator& it)
 		{
+			std::cout << "constructor\n";
 			Mas = it.Mas;
 			ptr = it.ptr;
 			Value = it.Value;
@@ -400,16 +420,16 @@ public:
 			value_type rhs = std::make_pair(Value->KeyName, Value->Data[Value->IndDat]);
 			return rhs;
 		}
-		
+
 		iterator operator->()
 		{
-			iterator rhs = new value_type;
-			rhs->first = Value->KeyName;
-			rhs->second = Value->Data[Value->IndDat];
-			ptr = rhs;
+			
+			ptr = new value_type;
+			ptr->first = Value->KeyName;
+			ptr->second = Value->Data[Value->IndDat];
 			return ptr;
 		}
-		
+
 		MapIterator operator++()
 		{
 			int IndKey = 0;
@@ -427,11 +447,17 @@ public:
 				if (Mas.size() <= IndKey)
 				{
 					Value = nullptr;
+					
 				}
 				else
 				{
 					Value = Mas[IndKey];
 				}
+			}
+			if (ptr != nullptr)
+			{
+				delete ptr;
+				ptr = nullptr;
 			}
 			return *this;
 		}
@@ -457,6 +483,11 @@ public:
 				{
 					Value = Mas[IndKey];
 				}
+			}
+			if (ptr != nullptr)
+			{
+				delete ptr;
+				ptr = nullptr;
 			}
 			return *this;
 		}
@@ -489,6 +520,11 @@ public:
 			{
 				Value = Mas[Mas.size() - 1];
 			}
+			if (ptr != nullptr)
+			{
+				delete ptr;
+				ptr = nullptr;
+			}
 			return *this;
 		}
 		MapIterator operator--(int)
@@ -506,24 +542,25 @@ public:
 				{
 					Value->IndDat = 0;
 					IndKey--;
-					if (IndKey < 0)
-					{
-						Value = nullptr;
-					}
-					else
-					{
-						Value = Mas[IndKey];
-					}
+				else
+				{
+					Value = Mas[IndKey];
+				}
 				}
 			}
 			else
 			{
 				Value = Mas[Mas.size() - 1];
 			}
+			if (ptr != nullptr)
+			{
+				delete ptr;
+				ptr = nullptr;
+			}
 			return *this;
 		}
 	};
-
+public:
 	// empty constructor
 	TMultimap()
 		:Root(),
@@ -732,7 +769,7 @@ public:
 		}
 		else
 		{
-			MapIterator r(MasPtr, MasPtr[i-1]);
+			MapIterator r(MasPtr, MasPtr[i - 1]);
 			it = r;
 		}
 	}
@@ -758,22 +795,9 @@ public:
 	//function find
 	MapIterator find(const key_type& rhs)
 	{
-		if (Root == nullptr)
-		{
-			MapIterator NewVal(MasPtr, nullptr);
-			return NewVal;
-		}
 		pTree el = FindKey(rhs);
-		if (el == nullptr)
-		{
-			MapIterator NewVal(MasPtr, nullptr);
-			return NewVal;
-		}
-		else
-		{
-			MapIterator NewVal(MasPtr, el);
-			return NewVal;
-		}
+		MapIterator p(MasPtr, el);
+		return p;
 	}
 
 	//function Empty
