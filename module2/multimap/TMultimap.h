@@ -1,7 +1,6 @@
 #include <iostream>
 #include <vector>
 
-
 template<class Key, class T>
 class TMultimap
 {
@@ -149,6 +148,19 @@ class TMultimap
 			MasPtr.push_back(tmp);
 		}
 	}
+	void Copy(pTree tmp)
+	{
+		if (tmp == nullptr)
+			return;
+		value_type rhs;
+		for (int i = 0; i < tmp->Data.size(); i++)
+		{
+			rhs = std::make_pair(tmp->KeyName, tmp->Data[i]);
+			InsertElem(rhs);
+		}
+		Copy(tmp->pLeft);
+		Copy(tmp->pRight);
+	}
 	void PT(pTree rhs)
 	{
 		if (!rhs)
@@ -160,22 +172,6 @@ class TMultimap
 		std:cout << "Key = " << rhs->KeyName << " => " << "Data = " << *it << '\n';
 		}
 		PT(rhs->pRight);
-	}
-	void CopyTree(pTree* NewRoot, pTree Root)
-	{
-		pTree tmp = Root;
-		pTree El = new Tree;
-		if (tmp == nullptr)
-			return;
-		El->KeyName = tmp->KeyName;
-		El->Data = tmp->Data;
-		El->pLeft = tmp->pLeft;
-		El->pRight = tmp->pRight;
-		El->pRoot = tmp->pRoot;
-		*NewRoot = El;
-		MasPtr.push_back(El);
-		CopyTree(&El->pLeft, tmp->pLeft);
-		CopyTree(&El->pRight, tmp->pRight);
 	}
 	void Remove(const key_type& rhs)
 	{
@@ -563,7 +559,7 @@ public:
 	TMultimap(TMultimap& map)
 	{
 		Count = map.Count;
-		CopyTree(&Root, map.Root);
+		Copy(map.Root);
 		Sort();
 	}
 
@@ -572,16 +568,7 @@ public:
 	{
 		if (Root != nullptr)
 			DeleteTree();
-		/*
-		CopyTree(&Root, &map.Root);
-		Count = map.Count;
-		*/
-		value_type rhs;
-		for (auto it = map.begin(); it != map.end(); it++)
-		{
-			rhs = std::make_pair((*it)->first, (*it).second);
-			InsertElem(rhs);
-		}
+		Copy(map.Root);
 		Sort();
 		Count = map.Count;
 		return *this;
