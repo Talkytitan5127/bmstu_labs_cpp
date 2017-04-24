@@ -1,5 +1,6 @@
 #include <iostream>
 #include <vector>
+#include <vld.h>
 
 template<class Key, class T>
 class TMultimap
@@ -117,6 +118,7 @@ class TMultimap
 			if (fr != nullptr)
 			{
 				fr->Data.push_back(rhs.second);
+				delete tmp;
 				return;
 			}
 			pTree p = Root;
@@ -328,18 +330,32 @@ public:
 	class MapIterator
 	{
 		pTree Value = nullptr;
+		iterator ptr = nullptr;
 		vec_type Mas;
 	public:
 		MapIterator() {}
-		~MapIterator() = default;
+		~MapIterator()
+		{
+			if (Value != nullptr) 
+			{
+				if (ptr != nullptr)
+				{
+					delete ptr;
+					ptr = nullptr;
+				}
+			}
+		}
 		MapIterator(vec_type M, pTree rhs)
 			:Mas(M),
+			ptr(nullptr),
 			Value(rhs) {}
 		MapIterator(vec_type M, const MapIterator& it)
 			:Mas(M),
+			ptr(nullptr),
 			Value(it.Value) {}
 		MapIterator(vec_type M, pTree rhs, int Ind)
 			:Mas(M),
+			ptr(nullptr),
 			Value(rhs)
 		{
 			rhs->IndDat = Ind;
@@ -379,6 +395,7 @@ public:
 		MapIterator operator=(const MapIterator& it)
 		{
 			Mas = it.Mas;
+			ptr = it.ptr;
 			Value = it.Value;
 			return *this;
 		}
@@ -387,13 +404,16 @@ public:
 			value_type rhs = std::make_pair(Value->KeyName, Value->Data[Value->IndDat]);
 			return rhs;
 		}
+		
 		iterator operator->()
 		{
 			iterator rhs = new value_type;
 			rhs->first = Value->KeyName;
 			rhs->second = Value->Data[Value->IndDat];
-			return rhs;
+			ptr = rhs;
+			return ptr;
 		}
+		
 		MapIterator operator++()
 		{
 			int IndKey = 0;
@@ -552,9 +572,18 @@ public:
 	{
 		if (Root != nullptr)
 			DeleteTree();
-		CopyTree(&Root, map.Root);
+		/*
+		CopyTree(&Root, &map.Root);
 		Count = map.Count;
+		*/
+		value_type rhs;
+		for (auto it = map.begin(); it != map.end(); it++)
+		{
+			rhs = std::make_pair((*it)->first, (*it).second);
+			InsertElem(rhs);
+		}
 		Sort();
+		Count = map.Count;
 		return *this;
 	}
 	// initializer operator =
