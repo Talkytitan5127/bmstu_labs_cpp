@@ -1,6 +1,6 @@
 #include <iostream>
 #include <vector>
-#include <vld.h>
+#include <map>
 
 template<class Key, class T>
 class TMultimap
@@ -21,7 +21,8 @@ class TMultimap
 		Tree* pLeft;
 		Tree* pRight;
 		Tree* pRoot;
-		int IndDat = 0;
+		int IndDat;
+		iterator ptr;
 	};
 
 	typedef Tree* pTree;
@@ -107,6 +108,8 @@ class TMultimap
 		tmp->pLeft = nullptr;
 		tmp->pRight = nullptr;
 		tmp->pRoot = nullptr;
+		tmp->ptr = nullptr;
+		tmp->IndDat = 0;
 		if (Root == nullptr)
 		{
 			Root = tmp;
@@ -224,17 +227,23 @@ class TMultimap
 					if (parent->pLeft == curr)
 					{
 						parent->pLeft = curr->pRight;
+						if (curr->ptr != nullptr)
+							delete curr->ptr;
 						delete curr;
 					}
 					else
 					{
 						parent->pRight = curr->pRight;
+						if (curr->ptr != nullptr)
+							delete curr->ptr;
 						delete curr;
 					}
 				}
 				else
 				{
 					Root = curr->pRight;
+					if (curr->ptr != nullptr)
+						delete curr->ptr;
 					delete curr;
 				}
 			}
@@ -245,17 +254,23 @@ class TMultimap
 					if (parent->pLeft == curr)
 					{
 						parent->pLeft = curr->pLeft;
+						if (curr->ptr != nullptr)
+							delete curr->ptr;
 						delete curr;
 					}
 					else
 					{
 						parent->pRight = curr->pLeft;
+						if (curr->ptr != nullptr)
+							delete curr->ptr;
 						delete curr;
 					}
 				}
 				else
 				{
 					Root = curr->pLeft;
+					if (curr->ptr != nullptr)
+						delete curr->ptr;
 					delete curr;
 				}
 			}
@@ -270,6 +285,8 @@ class TMultimap
 				else
 					parent->pRight = nullptr;
 			}
+			if (curr->ptr != nullptr)
+				delete curr->ptr;
 			delete curr;
 			return;
 		}
@@ -280,6 +297,8 @@ class TMultimap
 			if ((chkr->pLeft == nullptr) && (chkr->pRight == nullptr))
 			{
 				curr = chkr;
+				if (chkr->ptr != nullptr)
+					delete chkr->ptr;
 				delete chkr;
 				curr->pRight = nullptr;
 			}
@@ -298,6 +317,8 @@ class TMultimap
 					}
 					curr->KeyName = lcurr->KeyName;
 					curr->Data = lcurr->Data;
+					if (lcurr->ptr != nullptr)
+						delete lcurr->ptr;
 					delete lcurr;
 					lcurrp->pLeft = nullptr;
 				}
@@ -308,6 +329,8 @@ class TMultimap
 					curr->KeyName = tmp->KeyName;
 					curr->Data = curr->Data;
 					curr->pRight = tmp->pRight;
+					if (tmp->ptr != nullptr)
+						delete tmp->ptr;
 					delete tmp;
 				}
 			}
@@ -326,54 +349,52 @@ class TMultimap
 public:
 	class MapIterator
 	{
-		pTree Value = nullptr;
-		iterator ptr = nullptr;
+		iterator Value;
 		vec_type Mas;
 	public:
-		MapIterator() {}
-		//MapIterator(MapIterator&& it) = delete;
-		~MapIterator()
-		{
-			std::cout << "destructor\n";
-			if (ptr != nullptr)
-			{
-				if (Value != nullptr)
-					delete ptr;
-				ptr = nullptr;
-			}
-		}
-		MapIterator(vec_type M, pTree rhs)
+		MapIterator()
+			:Value(nullptr)
+		{}
+		/*MapIterator(vec_type M, MapIterator&& it)
 			:Mas(M),
-			Value(rhs) 
+			Value(it.Value) 
+		{}*/
+		~MapIterator() = default;
+		MapIterator(vec_type M, pTree rhs)
+			:Mas(M)
 		{
-			std::cout << "constructor\n";
-			if (ptr != nullptr)
-			{
-				delete ptr;
+			if (rhs != nullptr) {
+				delete rhs->ptr;
+				rhs->ptr = new value_type;
+				rhs->ptr->first = rhs->KeyName;
+				rhs->ptr->second = rhs->Data[rhs->IndDat];
+				Value = rhs->ptr;
 			}
-			ptr = nullptr;
+			else
+			{
+				Value = nullptr;
+			}
 		}
 		MapIterator(vec_type M, const MapIterator& it)
 			:Mas(M),
-			Value(it.Value) {
-			std::cout << "constructor\n";
-			if (ptr != nullptr)
-			{
-				delete ptr;
-			}
-			ptr = nullptr;
-		}
+			Value(it.Value) 
+		{}
 		MapIterator(vec_type M, pTree rhs, int Ind)
 			:Mas(M),
-			Value(rhs)
 		{
-			rhs->IndDat = Ind;
-			std::cout << "constructor\n";
-			if (ptr != nullptr)
+			if (rhs != nullptr)
 			{
-				delete ptr;
+				rhs->IndDat = Ind;
+				rhs->ptr = new value_type;
+				rhs->ptr->first = rhs->KeyName;
+				rhs->ptr->second = rhs->Data[rhs->IndDat];
+				Value = rhs->ptr;
 			}
-			ptr = nullptr;
+			else
+			{
+				Value = nullptr;
+			}
+
 		}
 		bool operator!=(const MapIterator& it)
 		{
@@ -407,87 +428,112 @@ public:
 				}
 			}
 		}
-		MapIterator operator=(const MapIterator& it)
+		MapIterator& operator=(const MapIterator& it)
 		{
-			std::cout << "constructor\n";
 			Mas = it.Mas;
-			ptr = it.ptr;
-			Value = it.Value;
+			if (Value != nullptr)
+			{
+				int i = 0;
+				for (i; i < Mas.size(); i++)
+				{
+					if (Value->first == Mas[i]->KeyName)
+						break;
+				}
+				delete Mas[i]->ptr;
+				Mas[i]->ptr = nullptr;
+			}
+			if (it.Value != nullptr)
+			{
+				Value = it.Value;
+			}
+			else
+				Value = nullptr;
 			return *this;
 		}
-		value_type operator*()
+
+		value_type& operator*()
 		{
-			value_type rhs = std::make_pair(Value->KeyName, Value->Data[Value->IndDat]);
-			return rhs;
+			return *Value;
 		}
 
-		iterator operator->()
+		iterator& operator->()
 		{
-			
-			ptr = new value_type;
-			ptr->first = Value->KeyName;
-			ptr->second = Value->Data[Value->IndDat];
-			return ptr;
+			return Value;
 		}
 
-		MapIterator operator++()
+		MapIterator& operator++()
 		{
 			int IndKey = 0;
 			for (IndKey; IndKey < Mas.size(); IndKey++)
 			{
-				if (Value == Mas[IndKey])
+				if (Value->first == Mas[IndKey]->KeyName)
 					break;
 			}
-			Value->IndDat++;
-			if (Value->Data.size() <= Value->IndDat)
+			Mas[IndKey]->IndDat++;
+			if (Mas[IndKey]->Data.size() <= Mas[IndKey]->IndDat)
 			{
+				Mas[IndKey]->IndDat--;
 				IndKey++;
-				Value->IndDat--;
-
-				if (Mas.size() <= IndKey)
-				{
-					Value = nullptr;
-					
-				}
-				else
-				{
-					Value = Mas[IndKey];
-				}
-			}
-			if (ptr != nullptr)
-			{
-				delete ptr;
-				ptr = nullptr;
-			}
-			return *this;
-		}
-		MapIterator operator++(int)
-		{
-			int IndKey = 0;
-			for (IndKey; IndKey < Mas.size(); IndKey++)
-			{
-				if (Value == Mas[IndKey])
-					break;
-			}
-			Value->IndDat++;
-			if (Value->Data.size() <= Value->IndDat)
-			{
-				IndKey++;
-				Value->IndDat--;
-
 				if (Mas.size() <= IndKey)
 				{
 					Value = nullptr;
 				}
 				else
 				{
-					Value = Mas[IndKey];
+					if (Value != nullptr)
+						delete Mas[IndKey]->ptr;
+					Mas[IndKey]->ptr = new value_type;
+					Mas[IndKey]->ptr->first = Mas[IndKey]->KeyName;
+					Mas[IndKey]->ptr->second = Mas[IndKey]->Data[Mas[IndKey]->IndDat];
+					Value = Mas[IndKey]->ptr;
 				}
 			}
-			if (ptr != nullptr)
+			else
 			{
-				delete ptr;
-				ptr = nullptr;
+				if (Value != nullptr)
+					delete Mas[IndKey]->ptr;
+				Mas[IndKey]->ptr = new value_type;
+				Mas[IndKey]->ptr->first = Mas[IndKey]->KeyName;
+				Mas[IndKey]->ptr->second = Mas[IndKey]->Data[Mas[IndKey]->IndDat];
+				Value = Mas[IndKey]->ptr;
+			}
+			return *this;
+		}
+		MapIterator& operator++(int)
+		{
+			int IndKey = 0;
+			for (IndKey; IndKey < Mas.size(); IndKey++)
+			{
+				if (Value->first == Mas[IndKey]->KeyName)
+					break;
+			}
+			Mas[IndKey]->IndDat++;
+			if (Mas[IndKey]->Data.size() <= Mas[IndKey]->IndDat)
+			{
+				Mas[IndKey]->IndDat--;
+				IndKey++;
+				if (Mas.size() <= IndKey)
+				{
+					Value = nullptr;
+				}
+				else
+				{
+					if (Value != nullptr)
+						delete Mas[IndKey]->ptr;
+					Mas[IndKey]->ptr = new value_type;
+					Mas[IndKey]->ptr->first = Mas[IndKey]->KeyName;
+					Mas[IndKey]->ptr->second = Mas[IndKey]->Data[Mas[IndKey]->IndDat];
+					Value = Mas[IndKey]->ptr;
+				}
+			}
+			else
+			{
+				if (Value != nullptr)
+					delete Mas[IndKey]->ptr;
+				Mas[IndKey]->ptr = new value_type;
+				Mas[IndKey]->ptr->first = Mas[IndKey]->KeyName;
+				Mas[IndKey]->ptr->second = Mas[IndKey]->Data[Mas[IndKey]->IndDat];
+				Value = Mas[IndKey]->ptr;
 			}
 			return *this;
 		}
@@ -495,16 +541,17 @@ public:
 		{
 			if (Value != nullptr)
 			{
-				Value->IndDat--;
+				
 				int IndKey = 0;
 				for (IndKey; IndKey < Mas.size(); IndKey++)
 				{
-					if (Value == Mas[IndKey])
+					if (Value->first == Mas[IndKey])
 						break;
 				}
-				if (Value->IndDat < 0)
+				Mas[IndKey]->IndDat--;
+				if (Mas[IndKey]->IndDat < 0)
 				{
-					Value->IndDat = 0;
+					Mas[IndKey]->IndDat = 0;
 					IndKey--;
 					if (IndKey < 0)
 					{
@@ -512,18 +559,31 @@ public:
 					}
 					else
 					{
-						Value = Mas[IndKey];
+						if (Mas[IndKey]->ptr != nullptr)
+							delete Mas[IndKey]->ptr;
+						Mas[IndKey]->ptr = new value_type;
+						Mas[IndKey]->ptr->first = Mas[IndKey]->KeyName;
+						Mas[IndKey]->ptr->second = Mas[IndKey]->Data[Mas[IndKey]->IndDat];
+						Value = Mas[IndKey]->ptr;
 					}
+				}
+				else
+				{
+					if (Value != nullptr)
+						delete Mas[IndKey]->ptr;
+					Mas[IndKey]->ptr = new value_type;
+					Mas[IndKey]->ptr->first = Mas[IndKey]->KeyName;
+					Mas[IndKey]->ptr->second = Mas[IndKey]->Data[Mas[IndKey]->IndDat];
+					Value = Mas[IndKey]->ptr;
 				}
 			}
 			else
 			{
-				Value = Mas[Mas.size() - 1];
-			}
-			if (ptr != nullptr)
-			{
-				delete ptr;
-				ptr = nullptr;
+				int ind = Mas.size() - 1;
+				Mas[ind]->ptr = new value_type;
+				Mas[ind]->ptr->first = Mas[ind]->KeyName;
+				Mas[ind]->ptr->second = Mas[ind]->Data[Mas[ind]->IndDat];
+				Value = Mas[ind]->ptr;
 			}
 			return *this;
 		}
@@ -531,31 +591,49 @@ public:
 		{
 			if (Value != nullptr)
 			{
-				Value->IndDat--;
+
 				int IndKey = 0;
 				for (IndKey; IndKey < Mas.size(); IndKey++)
 				{
-					if (Value == Mas[IndKey])
+					if (Value->first == Mas[IndKey])
 						break;
 				}
-				if (Value->IndDat < 0)
+				Mas[IndKey]->IndDat--;
+				if (Mas[IndKey]->IndDat < 0)
 				{
-					Value->IndDat = 0;
+					Mas[IndKey]->IndDat = 0;
 					IndKey--;
+					if (IndKey < 0)
+					{
+						Value = nullptr;
+					}
+					else
+					{
+						if (Mas[IndKey]->ptr != nullptr)
+							delete Mas[IndKey]->ptr;
+						Mas[IndKey]->ptr = new value_type;
+						Mas[IndKey]->ptr->first = Mas[IndKey]->KeyName;
+						Mas[IndKey]->ptr->second = Mas[IndKey]->Data[Mas[IndKey]->IndDat];
+						Value = Mas[IndKey]->ptr;
+					}
+				}
 				else
 				{
-					Value = Mas[IndKey];
-				}
+					if (Value != nullptr)
+						delete Mas[IndKey]->ptr;
+					Mas[IndKey]->ptr = new value_type;
+					Mas[IndKey]->ptr->first = Mas[IndKey]->KeyName;
+					Mas[IndKey]->ptr->second = Mas[IndKey]->Data[Mas[IndKey]->IndDat];
+					Value = Mas[IndKey]->ptr;
 				}
 			}
 			else
 			{
-				Value = Mas[Mas.size() - 1];
-			}
-			if (ptr != nullptr)
-			{
-				delete ptr;
-				ptr = nullptr;
+				int ind = Mas.size() - 1;
+				Mas[ind]->ptr = new value_type;
+				Mas[ind]->ptr->first = Mas[ind]->KeyName;
+				Mas[ind]->ptr->second = Mas[ind]->Data[Mas[ind]->IndDat];
+				Value = Mas[ind]->ptr;
 			}
 			return *this;
 		}
@@ -751,7 +829,6 @@ public:
 						fl = true;
 						if (MasPtr[i]->Data.size() == 0)
 						{
-							Remove(MasPtr[i]->KeyName);
 							onelen = true;
 						}
 						break;
@@ -771,6 +848,7 @@ public:
 		{
 			MapIterator r(MasPtr, MasPtr[i - 1]);
 			it = r;
+			Remove(MasPtr[i]->KeyName);
 		}
 	}
 
