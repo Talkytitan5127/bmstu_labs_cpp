@@ -468,6 +468,10 @@ void test_anf()
 	assert(static_cast<int>(f[1]) == 1); // 1*y
 	assert(static_cast<int>(f[2]) == 0); // 0*x
 	assert(static_cast<int>(f[3]) == 1); // 1*xy
+	boolean_function c("01110000");
+	boolean_function ac = c;
+	std::string a = get_polynom(ac);
+	std::cout << "polynom = > " << a << '\n';
 }
 
 
