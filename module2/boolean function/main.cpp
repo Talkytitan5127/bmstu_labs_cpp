@@ -544,7 +544,7 @@ void test_combo()
 	assert(coef[16 + 8 + 1]);  // z0z1x0
 	assert(coef[16 + 8 + 2]); // z0z1x0
 	assert(coef[16 + 8 + 4]);  // z0z1y
-	assert(!coef[63]);
+	assert(!coef[31]);
 }
 
 void test_combo2()
