@@ -151,6 +151,15 @@ public:
 	// тогда АНФ boolean_function будет равна x + y + xy + zx + zy + zyx
 	boolean_function(const std::string& table)
 	{
+		int k = 0;
+		int ch = table.size();
+		while (ch > 0)
+		{
+			k += ch % 2;
+			ch /= 2;
+		}
+		if (k != 1)
+			throw std::exception("length error\n");
 		for (int i = 0; i < table.size(); i++)
 		{
 			if (table[i] == '0')
@@ -164,10 +173,28 @@ public:
 	// тогда АНФ boolean_function будет равна x + y + 1
 	boolean_function(const std::vector<value_type>& table)
 	{
+		int k = 0;
+		int ch = table.size();
+		while (ch > 0)
+		{
+			k += ch % 2;
+			ch /= 2;
+		}
+		if (k != 1)
+			throw std::exception("length error\n");
 		func = table;
 	}
 	boolean_function(const std::initializer_list<bool> vars)
 	{
+		int k = 0;
+		int ch = vars.size();
+		while (ch > 0)
+		{
+			k += ch % 2;
+			ch /= 2;
+		}
+		if (k != 1)
+			throw std::exception("length error\n");
 		for (auto &v : vars)
 		{
 			func.push_back(v);
@@ -425,7 +452,7 @@ public:
 	// T(x1, x2, ..., xN) - текущая функция
 	// operator вернет новую функцию, которая равна композиции G = T(fs[0], fs[1], ..., fs[N-1])
 	boolean_function operator()(const std::vector<boolean_function>& fs) const
-  {
+	{
 		std::vector<value_type> res;
 		std::vector<boolean_function> f;
 
@@ -444,18 +471,18 @@ public:
 			mas[i] = new int[len];
 		}
 
-		int k = 0;
 		int it = 0;
 		while (it < f.size())
 		{
 			for (int i = 0; i < len; i++)
 			{
+				int k = 0;
 				for (int j = 0; j < s; j++)
 				{
-					if (j >= f[it].size())
-						mas[j][i] = 0;
-					else
-						mas[j][i] = f[it][j];
+					if (k >= f[it].size())
+						k = 0;
+					mas[j][i] = f[it][k];
+					k++;
 				}
 				it++;
 			}
@@ -472,6 +499,8 @@ public:
 			}
 			res.push_back(func[ch]);
 		}
+		for (int i = 0; i < len; i++)
+			delete[] mas[i];
 
 		boolean_function result(res);
 		return result;
@@ -496,18 +525,19 @@ public:
 			mas[i] = new int[len];
 		}
 
-		int k = 0;
+		
 		int it = 0;
 		while (it < f.size())
 		{
 			for (int i = 0; i < len; i++)
 			{
+				int k = 0;
 				for (int j = 0; j < s; j++)
 				{
-					if (j >= f[it].size())
-						mas[j][i] = 0;
-					else
-						mas[j][i] = f[it][j];
+					if (k >= f[it].size())
+						k = 0;
+					mas[j][i] = f[it][k];
+					k++;
 				}
 				it++;
 			}
@@ -524,6 +554,8 @@ public:
 			}
 			res.push_back(func[ch]);
 		}
+		for (int i = 0; i < len; i++)
+			delete[] mas[i];
 
 		boolean_function result(res);
 		return result;
