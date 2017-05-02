@@ -112,6 +112,7 @@ public:
 		for (int i = 0; i < len; i++)
 			delete[] mas[i];
 		
+		delete[] mas;
 		return f;
 	}
 	
@@ -499,8 +500,10 @@ public:
 			}
 			res.push_back(func[ch]);
 		}
-		for (int i = 0; i < len; i++)
+		for (int i = 0; i < s; i++)
 			delete[] mas[i];
+
+		delete[] mas;
 
 		boolean_function result(res);
 		return result;
@@ -554,8 +557,10 @@ public:
 			}
 			res.push_back(func[ch]);
 		}
-		for (int i = 0; i < len; i++)
+		for (int i = 0; i < s; i++)
 			delete[] mas[i];
+
+		delete[] mas;
 
 		boolean_function result(res);
 		return result;
@@ -700,6 +705,8 @@ public:
 		
 		for (int i = 0; i < len; i++)
 			delete[] mas[i];
+
+		delete[] mas;
 		
 		return f;
 	}
