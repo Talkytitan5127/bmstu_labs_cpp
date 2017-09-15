@@ -11,41 +11,41 @@
 ## Tutorial
 
 ```bash
-$ export GITHUB_USERNAME=<имя_пользователя>
+$ export GITHUB_USERNAME=Talkytitan5127
 $ export GIST_TOKEN=<сохраненный_токен>
 $ alias edit=<nano|vi|vim|subl>
 ```
 
 ```bash
-$ npm install -g gistup
+$ npm install -g gistup  #устанавливаем утилиту gistup
 ```
 
 ```bash
-$ cat > ~/.gistup.json <<EOF
-{
+$ cat > ~/.gistup.json <<EOF   #создает файл .gistup.json (или открывает если файл существует)
+{                              #затем идет редактирование до тех пор, пока не ввели "EOF"
   "token": "${GIST_TOKEN}"
 }
 EOF
 ```
 
 ```bash
-$ cd ~
-$ mkdir -p workspace/labs/projects/
-$ mkdir -p workspace/labs/tasks/
-$ mkdir -p workspace/labs/reports/
+$ cd ~                                   #переход в домашнюю директорию
+$ mkdir -p workspace/labs/projects/      #создание директории workspace/labs/projects/
+$ mkdir -p workspace/labs/tasks/         #создание директории workspace/labs/tasks/
+$ mkdir -p workspace/labs/reports/       #создание директории workspace/labs/tasks/
 ```
 
 ## Report
 
 ```bash
-$ cd ~/workspace/labs/
-$ export LAB_NUMBER=02
-$ git clone https://github.com/tp-labs/lab${LAB_NUMBER} tasks/lab${LAB_NUMBER}
-$ mkdir reports/lab${LAB_NUMBER}
-$ cp tasks/lab${LAB_NUMBER}/README.md reports/lab${LAB_NUMBER}/REPORT.md
-$ cd reports/lab${LAB_NUMBER}
-$ edit REPORT.md
-$ gistup -m "lab${LAB_NUMBER}"
+$ cd ~/workspace/labs/                  #переход в директорию ~/workspace/labs/
+$ export LAB_NUMBER=02                  #в виртуальное окружение добавляем переменную LAB_NUMBER
+$ git clone https://github.com/tp-labs/lab${LAB_NUMBER} tasks/lab${LAB_NUMBER} #клонируем репозиторий в папку
+$ mkdir reports/lab${LAB_NUMBER}        #создание директории reports/lab
+$ cp tasks/lab${LAB_NUMBER}/README.md reports/lab${LAB_NUMBER}/REPORT.md копируем содержимое README в REPORT
+$ cd reports/lab${LAB_NUMBER}           #открываем директорию reports/lab
+$ edit REPORT.md                        #открываем файл REPORT для редактирования
+$ gistup -m "lab${LAB_NUMBER}"          #коммитит гист файл
 ```
 
 ## Links
