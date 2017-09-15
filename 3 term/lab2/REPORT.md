@@ -12,8 +12,8 @@
 
 ```bash
 $ export GITHUB_USERNAME=Talkytitan5127
-$ export GIST_TOKEN=*******************
-$ alias edit=<nano|vi|vim|subl>
+$ export GIST_TOKEN=***************************************
+$ alias edit=nano
 ```
 
 ```bash
@@ -21,8 +21,11 @@ $ npm install -g gistup  #устанавливаем утилиту gistup
 ```
 
 ```bash
-$ cat > ~/.gistup.json <<EOF   #создает файл .gistup.json (или открывает если файл существует)
-{                              #затем идет редактирование до тех пор, пока не ввели "EOF"
+#создает файл .gistup.json (или открывает если файл существует)
+#затем идет редактирование до тех пор, пока не ввели "EOF"
+
+$ cat > ~/.gistup.json <<EOF   
+{                              
   "token": "${GIST_TOKEN}"
 }
 EOF
