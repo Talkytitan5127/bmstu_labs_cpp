@@ -12,7 +12,7 @@
 
 ```bash
 $ export GITHUB_USERNAME=Talkytitan5127
-$ export GIST_TOKEN=<сохраненный_токен>
+$ export GIST_TOKEN=*******************
 $ alias edit=<nano|vi|vim|subl>
 ```
 
